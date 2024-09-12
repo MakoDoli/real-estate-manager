@@ -47,7 +47,7 @@ export async function getAgents() {
     );
     if (!response.ok) console.error("Request failed");
     const data = await response.json();
-    console.log(data);
+    return data;
   } catch (err) {
     console.error(err);
     return NextResponse.json({ message: "Something went wrong" });
