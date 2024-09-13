@@ -7,23 +7,27 @@ import Image from "next/image";
 import { HiOutlineTrash } from "react-icons/hi2";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { createNewListing } from "@/service/apiListings";
+import { useAgents } from "@/hooks/useAgents";
 
 export default function CreateNewListing() {
-  const { control, register, handleSubmit, formState, watch } = useForm({
-    defaultValues: {
-      choice: "იყიდება",
-      region_id: "",
-    },
-  });
+  const { control, register, handleSubmit, formState, watch, setValue } =
+    useForm({
+      defaultValues: {
+        is_rental: "იყიდება",
+        region_id: "",
+        image: "",
+      },
+    });
   const { errors, isSubmitting } = formState;
 
   const { regions } = useRegions();
   const { cities } = useCities();
+  const { agents } = useAgents();
 
   const [filteredCities, setFilteredCities] = useState([]);
 
   const changedRegion = watch("region_id");
-  console.log(changedRegion);
 
   useEffect(() => {
     if (changedRegion) {
@@ -33,34 +37,43 @@ export default function CreateNewListing() {
     }
   }, [changedRegion]);
 
-  const submitFunction = (data) => {
-    const formData = new FormData();
-    const image = data.image[0];
-    formData.append("address", data.address);
-    formData.append("region", data.region_id);
-    formData.append("zip_code", data.zip_code);
-    formData.append("price", data.price);
-    formData.append("area", data.area);
-    formData.append("bedrooms", data.bedrooms);
-    formData.append("image", image);
-
-    //createNewAgent(formData);
-    console.log(image);
-  };
   const [imagePreview, setImagePreview] = useState(null);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      console.log(file.size);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
+    setValue("image", file);
   };
   const handleRemoveImage = () => {
     setImagePreview(null);
     document.getElementById("image").value = "";
+  };
+  const submitFunction = (data) => {
+    const formData = new FormData();
+    const image = data.image[0];
+    const is_rental = data.is_rental === "ქირავდება" ? 1 : 0;
+    formData.append("address", data.address);
+    formData.append("region_id", data.region_id);
+    formData.append("zip_code", data.zip_code);
+    formData.append("city_id", data.city_id);
+    formData.append("agent_id", Number(data.agent_id));
+    formData.append("price", Number(data.price));
+    formData.append("area", Number(data.area));
+    formData.append("bedrooms", Number(data.bedrooms));
+    formData.append("image", image);
+    formData.append("is_rental", Number(is_rental));
+    formData.append("description", data.description);
+
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
+    createNewListing(formData);
   };
 
   return (
@@ -79,8 +92,7 @@ export default function CreateNewListing() {
               <input
                 type="radio"
                 value="იყიდება"
-                {...register("choice", { required: true })}
-                className="form-radio text-green-500 border-gray-300 focus:ring-green-500"
+                {...register("is_rental", { required: true })}
               />
               <span className="ml-2 text-sm">იყიდება</span>
             </label>
@@ -89,8 +101,7 @@ export default function CreateNewListing() {
               <input
                 type="radio"
                 value="ქირავდება"
-                {...register("choice", { required: true })}
-                className="form-radio text-green-500 border-gray-300 focus:ring-green-500"
+                {...register("is_rental", { required: true })}
               />
               <span className="ml-2 text-sm">ქირავდება</span>
             </label>
@@ -395,7 +406,7 @@ export default function CreateNewListing() {
           <label htmlFor="">აღწერა*</label>
 
           <textarea
-            className=" outline-none border border-1 border-gray-400 rounded-lg p-3 h-[120px] "
+            className={`${slimFont.className} text-sm outline-none border border-1 border-gray-400 rounded-lg p-3 h-[120px]`}
             id="description"
             {...register("description", {
               required: "სავალდებულო ველი",
@@ -423,42 +434,24 @@ export default function CreateNewListing() {
           )}
         </div>
         <div className="mt-[49px] flex flex-col gap-3">
-          <label htmlFor="image">ატვირთეთ ფოტო*</label>
+          <label htmlFor="">ატვირთეთ ფოტო*</label>
 
-          <div className="border h-[120px] border-slate-900 rounded-lg p-3 border-dashed flex justify-center items-center">
-            {imagePreview ? (
-              <div className="relative w-32  flex items-center justify-center">
+          <div className="  border h-[120px] border-slate-900 rounded-lg p-3   border-dashed flex justify-center items-center">
+            <label htmlFor="image" className=" cursor-pointer">
+              <span>
                 <Image
-                  src={imagePreview}
-                  alt="Uploaded Preview"
-                  width={92}
-                  height={82}
-                  //   className="object-cover h-full"
+                  src="/icons/plus-circle.png"
+                  alt="add"
+                  width={24}
+                  height={24}
                 />
-                <div
-                  onClick={handleRemoveImage}
-                  className="absolute top-20 right-2 cursor-pointer"
-                >
-                  <HiOutlineTrash />
-                </div>
-              </div>
-            ) : (
-              <label htmlFor="image" className="cursor-pointer">
-                <span>
-                  <Image
-                    src="/icons/plus-circle.png"
-                    alt="add"
-                    width={24}
-                    height={24}
-                  />
-                </span>
-              </label>
-            )}
+              </span>
+            </label>
             <input
               className="hidden"
               id="image"
               type="file"
-              accept="image/png, image/jpg, image/jpeg, image/webp"
+              accept="image/*"
               {...register("image", {
                 required: "სავალდებულო ველი",
                 validate: {
@@ -467,14 +460,42 @@ export default function CreateNewListing() {
                     "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
                 },
               })}
-              onChange={(e) => {
-                handleImageChange(e);
-              }}
+              //onChange={handleImageChange}
             />
             {errors.image && (
               <p className="text-xs text-red-400">{`${errors.image?.message}`}</p>
             )}
           </div>
+        </div>
+        <div className="flex flex-col gap-1 w-[384px] h-[64px] mt-[80px]">
+          <label className="block mb-[22px] text-lg font-medium ">აგენტი</label>
+          <label htmlFor="region_id">აირჩიე</label>
+          <Controller
+            name="agent_id"
+            control={control}
+            rules={{ required: "აირჩიეთ რეგიონი" }}
+            render={({ field }) => (
+              <select
+                {...field}
+                className={`${slimFont.className} outline-none border border-1 border-gray-400 rounded-lg p-3  text-[14px] `}
+                id="region_id"
+              >
+                <option value="">აგენტების სია</option>
+                {agents?.map((agent) => (
+                  <option
+                    key={agent.id}
+                    className={`${slimFont.className}`}
+                    value={agent.id}
+                  >
+                    {agent.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
+          {errors.region_id && (
+            <p className="text-xs text-red-400">{errors.region_id.message}</p>
+          )}
         </div>
         <div className="flex gap-[31px] h-[47px] justify-end w-full mt-[91px]">
           <button
