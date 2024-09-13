@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/header/Header";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 const mediumFont = localFont({
   src: "./fonts/firago-latin-500-normal.ttf",
@@ -16,8 +17,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${mediumFont.className}  antialiased`}>
-        <Header />
-        {children}
+        <ReactQueryProvider>
+          <Header />
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -20,7 +20,6 @@ export default function CreateNewAgent({ setOpen }) {
     formData.append("avatar", avatar);
 
     createNewAgent(formData);
-    // Add new agent to the database or any other action
   };
 
   return (
@@ -146,7 +145,7 @@ export default function CreateNewAgent({ setOpen }) {
               {...register("phone", {
                 pattern: {
                   value: /^5\d{8}$/,
-                  message: "მხოლოდ რიცხვები",
+                  message: "ტელეფონის ნომერი უნდა იყოს 5XXXXXXXX ფორმატში",
                 },
               })}
             />

@@ -1,14 +1,13 @@
 import { slimFont } from "@/app/fonts/fontWeight";
-
-import { getRegions } from "@/service/apiRegions";
+import { useRegions } from "@/hooks/useRegions";
+import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, forwardRef } from "react";
 
-export default function Regions({ open }) {
+const Regions = forwardRef(({ open, setOpen }, ref) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [isOpen, setIsOpen] = useState(open);
-  const [regions, setRegions] = useState([]);
-  const dropdownRef = useRef(null);
+
+  const { regions, isLoading } = useRegions();
 
   const handleChange = (option) => {
     setSelectedOptions((prevSelected) =>
@@ -18,29 +17,11 @@ export default function Regions({ open }) {
     );
   };
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
+  if (!open) return null;
+  if (isLoading) return <MinisSpinner />;
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const data = await getRegions();
-      setRegions(data);
-    };
-    getData();
-  }, []);
-  if (!isOpen) return null;
   return (
-    <div className="relative inline-block" ref={dropdownRef}>
+    <div className="relative inline-block" ref={ref}>
       <div className="absolute mt-2 bg-white border border-gray-300 w-[731px] h-[284px] overflow-y-auto p-2 shadow-md">
         <div className="mb-4">
           <h3 className="text-base">რეგიონის მიხედვით</h3>
@@ -72,9 +53,13 @@ export default function Regions({ open }) {
         </div>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 hidden">
         <strong>Selected:</strong> {selectedOptions.join(", ")}
       </div>
     </div>
   );
-}
+});
+
+Regions.displayName = "Regions";
+
+export default Regions;
