@@ -10,6 +10,10 @@ import { Controller, useForm } from "react-hook-form";
 import { createNewListing } from "@/service/apiListings";
 import { useAgents } from "@/hooks/useAgents";
 import Link from "next/link";
+import { useCreateNewListing } from "@/hooks/useCreateNewListing";
+
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreateNewListing() {
   const { control, register, handleSubmit, formState, watch, setValue } =
@@ -20,12 +24,14 @@ export default function CreateNewListing() {
         image: "",
       },
     });
+  const { createListing, isPending } = useCreateNewListing();
   const { errors, isSubmitting } = formState;
+  const router = useRouter();
 
   const { regions } = useRegions();
   const { cities } = useCities();
   const { agents } = useAgents();
-
+  const queryClient = useQueryClient();
   const [filteredCities, setFilteredCities] = useState([]);
 
   const changedRegion = watch("region_id");
@@ -74,7 +80,17 @@ export default function CreateNewListing() {
     // for (let [key, value] of formData.entries()) {
     //   console.log(`${key}: ${value}`);
     // }
-    createNewListing(formData);
+    //createNewListing(formData);
+    createListing(formData, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["listings"],
+        });
+        router.push("/");
+      },
+    });
+    // console.log(formData);
+    // router.push("/");
   };
 
   return (
@@ -513,10 +529,10 @@ export default function CreateNewListing() {
           </Link>
           <button
             className="p-3 bg-buttonOrange
- hover:bg-hoverOrange text-[16px] text-white hover-ease rounded-lg "
+ hover:bg-hoverOrange w-[187px] h-[47px] text-[16px] text-white hover-ease rounded-lg "
             disabled={isSubmitting}
           >
-            {isSubmitting ? <MinisSpinner /> : "დაამატე ლისტინგი"}
+            {isPending ? <MinisSpinner /> : "დაამატე ლისტინგი"}
           </button>
         </div>
       </form>

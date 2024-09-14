@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { boldFont, slimFont } from "@/app/fonts/fontWeight";
 import Image from "next/image";
 import Link from "next/link";
