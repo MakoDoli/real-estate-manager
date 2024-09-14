@@ -13,7 +13,7 @@ export default function Menu() {
         <PriceRange />
       </div>
 
-      <div className="mr-[162px] flex gap-4 items-center">
+      <div className=" flex gap-4 items-center">
         <Link href="/create-listing">
           <div className="w-[230px] h-[47px] border border-buttonOrange bg-buttonOrange text-white hover:bg-hoverOrange flex justify-center items-center gap-2 rounded-lg cursor-pointer ">
             <p className={`${slimFont.className} text-4xl`}>+</p>{" "}

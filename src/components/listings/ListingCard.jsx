@@ -5,7 +5,7 @@ import React from "react";
 
 export default function ListingCard({ item }) {
   return (
-    <div className=" w-[384px] h-[455px] rounded-[14px] shadow-md relative pl-1 ">
+    <div className=" w-[384px] h-[455px] rounded-[14px] shadow-md relative  ">
       <div className="w-[90px] h-[30px] rounded-3xl bg-iconGray bg-opacity-50 absolute z-10 text-white text-[12px] flex justify-center items-center top-[23px] left-[23px]">{`${
         item.is_rental === 1 ? "ქირავდება" : "იყიდება"
       }`}</div>

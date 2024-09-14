@@ -4,8 +4,10 @@ import useListingDetails from "../../hooks/useListingDetails";
 import { boldFont, slimFont, mediumFont } from "@/app/fonts/fontWeight";
 import Link from "next/link";
 import Spinner from "../ui/Spinner";
+import Carousel from "../carousel/Carousel";
 export default function ListingDetails({ id, region }) {
   const { listingDetails, isLoading, error } = useListingDetails();
+
   if (error) return <div>Error: {error.message}</div>;
   if (isLoading) return <Spinner />;
   const {
@@ -103,7 +105,7 @@ export default function ListingDetails({ id, region }) {
               </div>
             </div>
             <div
-              className={`${mediumFont.className} w-[131px] h-[34px] border border-deleteGray rounded-md text-[12px] text-deleteGray flex justify-center items-center`}
+              className={`${mediumFont.className} w-[131px] h-[34px] border border-deleteGray rounded-md text-[12px] text-deleteGray flex justify-center items-center cursor-pointer`}
             >
               ლისტინგის წაშლა
             </div>
@@ -115,6 +117,7 @@ export default function ListingDetails({ id, region }) {
       >
         გამოქვეყნების თარიღი {formattedDate}{" "}
       </div>
+      <div className="text-[32px] my-[52px]">ბინები მსგავს ლოკაციაზე</div>
     </div>
   );
 }
