@@ -1,6 +1,6 @@
-import MinisSpinner from "@/ui/MiniSpinner";
 import React from "react";
+import Spinner from "../components/ui/Spinner";
 
 export default function Loading() {
-  return <h1> loading</h1>;
+  return <Spinner />;
 }

@@ -4,13 +4,12 @@ import Link from "next/link";
 import React from "react";
 
 export default function ListingCard({ item }) {
-  console.log(item);
   return (
     <div className=" w-[384px] h-[455px] rounded-[14px] shadow-md relative pl-1 ">
-      <div className="w-[90px] h-[30px] rounded-3xl bg-iconGray absolute z-10 opacity-50 top-[23px] left-[23px]"></div>
-      <span className="z-20 absolute text-white text-[12px] top-[29px] left-[33px] ">
-        {`${item.is_rental === 1 ? "ქირავდება" : "იყიდება"}`}
-      </span>
+      <div className="w-[90px] h-[30px] rounded-3xl bg-iconGray bg-opacity-50 absolute z-10 text-white text-[12px] flex justify-center items-center top-[23px] left-[23px]">{`${
+        item.is_rental === 1 ? "ქირავდება" : "იყიდება"
+      }`}</div>
+
       <Link href={`/${item.city.region.id}/${item.id}/details`}>
         <Image src={item.image} width={384} height={307} alt="listing-image" />
       </Link>

@@ -24,7 +24,7 @@ export async function createNewListing(payload) {
 
     const data = await response.json();
     console.log(data);
-    return NextResponse.json({ data }, { status: 201 });
+    return data;
   } catch (err) {
     console.error(err);
     return NextResponse.json(
@@ -38,6 +38,29 @@ export async function getListings() {
   try {
     const response = await fetch(
       "https://api.real-estate-manager.redberryinternship.ge/api/real-estates",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (!response.ok) console.error("Request failed");
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Something went wrong" });
+  }
+}
+
+export async function getListingById(id) {
+  try {
+    const response = await fetch(
+      `https://api.real-estate-manager.redberryinternship.ge/api/real-estates/${parseInt(
+        id
+      )}`,
       {
         method: "GET",
         headers: {
