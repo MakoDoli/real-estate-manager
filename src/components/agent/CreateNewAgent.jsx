@@ -11,16 +11,14 @@ export default function CreateNewAgent({ setOpen }) {
   const { register, handleSubmit, formState, reset, watch } = useForm();
   const { errors, isSubmitting } = formState;
 
-  // Load form data from localStorage when the modal opens
   useEffect(() => {
     const savedData = localStorage.getItem("formData");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      reset(parsedData); // Set form values to the saved data
+      reset(parsedData);
     }
   }, [reset]);
 
-  // Save form data to localStorage whenever formData changes
   useEffect(() => {
     const subscription = watch((value) => {
       localStorage.setItem("formData", JSON.stringify(value));

@@ -7,7 +7,6 @@ import Image from "next/image";
 import { HiOutlineTrash } from "react-icons/hi2";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { createNewListing } from "@/service/apiListings";
 import { useAgents } from "@/hooks/useAgents";
 import Link from "next/link";
 import { useCreateNewListing } from "@/hooks/useCreateNewListing";
@@ -42,6 +41,7 @@ export default function CreateNewListing() {
         cities?.filter((city) => city.region_id === parseInt(changedRegion))
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changedRegion]);
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -77,10 +77,6 @@ export default function CreateNewListing() {
     formData.append("is_rental", Number(is_rental));
     formData.append("description", data.description);
 
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(`${key}: ${value}`);
-    // }
-    //createNewListing(formData);
     createListing(formData, {
       onSuccess: () => {
         queryClient.invalidateQueries({
@@ -89,8 +85,6 @@ export default function CreateNewListing() {
         router.push("/");
       },
     });
-    // console.log(formData);
-    // router.push("/");
   };
 
   return (
