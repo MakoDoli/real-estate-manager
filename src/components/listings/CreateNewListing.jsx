@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreateNewListing() {
-  const { control, register, handleSubmit, formState, watch, setValue } =
+  const { control, register, handleSubmit, formState, watch, reset, setValue } =
     useForm({
       defaultValues: {
         is_rental: "იყიდება",
@@ -34,6 +34,20 @@ export default function CreateNewListing() {
   const [filteredCities, setFilteredCities] = useState([]);
 
   const changedRegion = watch("region_id");
+  useEffect(() => {
+    const savedData = localStorage.getItem("listingData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      reset(parsedData);
+    }
+  }, [reset]);
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      localStorage.setItem("listingData", JSON.stringify(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   useEffect(() => {
     if (changedRegion) {
@@ -83,6 +97,7 @@ export default function CreateNewListing() {
           queryKey: ["listings"],
         });
         router.push("/");
+        localStorage.removeItem("formData");
       },
     });
   };
