@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { slimFont } from "@/app/fonts/fontWeight";
 import { createNewAgent } from "@/service/apiAgents";
 import MinisSpinner from "@/ui/MiniSpinner";
@@ -7,8 +8,25 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 export default function CreateNewAgent({ setOpen }) {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState, reset, watch } = useForm();
   const { errors, isSubmitting } = formState;
+
+  // Load form data from localStorage when the modal opens
+  useEffect(() => {
+    const savedData = localStorage.getItem("formData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      reset(parsedData); // Set form values to the saved data
+    }
+  }, [reset]);
+
+  // Save form data to localStorage whenever formData changes
+  useEffect(() => {
+    const subscription = watch((value) => {
+      localStorage.setItem("formData", JSON.stringify(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const submitFunction = (data) => {
     const formData = new FormData();
@@ -20,6 +38,9 @@ export default function CreateNewAgent({ setOpen }) {
     formData.append("avatar", avatar);
 
     createNewAgent(formData);
+
+    // Clear localStorage on successful submit
+    localStorage.removeItem("formData");
   };
 
   return (
@@ -212,8 +233,7 @@ export default function CreateNewAgent({ setOpen }) {
           გაუქმება
         </button>
         <button
-          className="p-3 bg-buttonOrange
- hover:bg-hoverOrange text-[16px] text-white hover-ease rounded-lg "
+          className="p-3 bg-buttonOrange hover:bg-hoverOrange text-[16px] text-white hover-ease rounded-lg"
           disabled={isSubmitting}
         >
           {isSubmitting ? <MinisSpinner /> : "დაამატე აგენტი"}

@@ -24,7 +24,7 @@ export default function AgentModal() {
         </div>
       </DialogTrigger>
       {open && (
-        <DialogContent className="flex max-h-[784px] h-full flex-col max-w-[1009px]  items-center justify-center gap-8">
+        <DialogContent className="flex h-full max-h-[784px]  flex-col max-w-[1009px]  items-center overflow-y-auto justify-center gap-8">
           <DialogHeader className="items-center">
             <DialogTitle className="text-[32px]">აგენტის დამატება</DialogTitle>
           </DialogHeader>
