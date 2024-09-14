@@ -22,7 +22,7 @@ const Regions = forwardRef(({ open, setOpen }, ref) => {
 
   return (
     <div className="relative inline-block" ref={ref}>
-      <div className="absolute mt-2 bg-white border border-gray-300 w-[731px] h-[284px] overflow-y-auto p-2 shadow-md">
+      <div className="absolute mt-2 bg-white border border-gray-300 w-[731px] h-[284px] overflow-y-auto rounded-lg p-2 shadow-md z-30">
         <div className="mb-4">
           <h3 className="text-base">რეგიონის მიხედვით</h3>
         </div>

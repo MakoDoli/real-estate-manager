@@ -14,3 +14,8 @@ export const mediumFont = localFont({
   src: "./firago-latin-500-normal.ttf",
   fallback: ["sans-serif"],
 });
+
+export const helvetica = localFont({
+  src: "./HelveticaNeueMedium.otf",
+  fallback: ["sans-serif"],
+});

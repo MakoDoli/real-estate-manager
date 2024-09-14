@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
 
-import AgentModal from "../agent/AgentModal";
-import RegionsButton from "../filters/RegionsButton";
 import Menu from "../filters/Menu";
+import Listings from "../listings/Listings";
 
 export default function HomePage() {
   return (
-    <div>
+    <main className="px-[162px] py-[77px]">
       <Menu />
-    </div>
+      <Listings />
+    </main>
   );
 }

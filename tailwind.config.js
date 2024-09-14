@@ -11,6 +11,7 @@ module.exports = {
       colors: {
         buttonOrange: "#F93B1D",
         hoverOrange: " #DF3014",
+        iconGray: " #021526B2",
       },
       borderRadius: {
         lg: "var(--radius)",

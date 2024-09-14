@@ -1,5 +1,5 @@
 "use client";
-import { slimFont } from "@/app/fonts/fontWeight";
+import { helvetica, slimFont } from "@/app/fonts/fontWeight";
 import { useCities } from "@/hooks/useCities";
 import { useRegions } from "@/hooks/useRegions";
 import MinisSpinner from "@/ui/MiniSpinner";
@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { createNewListing } from "@/service/apiListings";
 import { useAgents } from "@/hooks/useAgents";
+import Link from "next/link";
 
 export default function CreateNewListing() {
   const { control, register, handleSubmit, formState, watch, setValue } =
@@ -84,8 +85,8 @@ export default function CreateNewListing() {
         onSubmit={handleSubmit(submitFunction)}
       >
         <div className="mb-[80px]">
-          <label className="block mb-2 text-lg font-medium ">
-            გარიგების ტიპი
+          <label className={`${helvetica.className}  mb-2 text-lg font-medium`}>
+            {"გარიგების ტიპი".toUpperCase()}
           </label>
           <div className={`${slimFont.className} flex items-center space-x-4`}>
             <label className="flex items-center">
@@ -111,10 +112,12 @@ export default function CreateNewListing() {
           )}
         </div>
         <div className="mb-[80px]">
-          <label className="block mb-[22px] text-lg font-medium ">
-            მდებარეობა
+          <label
+            className={`${helvetica.className}  mb-[22px] text-lg font-medium`}
+          >
+            {"მდებარეობა".toUpperCase()}
           </label>
-          <div className="flex gap-[20px]">
+          <div className="flex gap-[20px] mt-[22px]">
             <div className="flex flex-col gap-[49px]">
               <div className="flex flex-col gap-1 w-[384px] h-[64px]">
                 <label htmlFor="address">მისამართი*</label>
@@ -269,10 +272,10 @@ export default function CreateNewListing() {
           </div>
         </div>
         <div>
-          <label className="block mb-[22px] text-lg font-medium ">
-            ბინის დეტალები
+          <label className={`${helvetica.className} text-lg font-medium`}>
+            {"ბინის დეტალები".toUpperCase()}
           </label>
-          <div className="flex gap-[20px]">
+          <div className="flex gap-[20px] mt-[22px]">
             <div className="flex flex-col gap-[49px]">
               <div className="flex flex-col gap-1 w-[384px] h-[64px]">
                 <label htmlFor="price">ფასი*</label>
@@ -468,7 +471,9 @@ export default function CreateNewListing() {
           </div>
         </div>
         <div className="flex flex-col gap-1 w-[384px] h-[64px] mt-[80px]">
-          <label className="block mb-[22px] text-lg font-medium ">აგენტი</label>
+          <label className={`${helvetica.className} text-lg font-medium`}>
+            {"აგენტი".toUpperCase()}
+          </label>
           <label htmlFor="region_id">აირჩიე</label>
           <Controller
             name="agent_id"
@@ -498,12 +503,14 @@ export default function CreateNewListing() {
           )}
         </div>
         <div className="flex gap-[31px] h-[47px] justify-end w-full mt-[91px]">
-          <button
-            type="button"
-            className="border p-3 text-[16px] text-buttonOrange rounded-lg border-buttonOrange hover:bg-buttonOrange hover:text-white"
-          >
-            გაუქმება
-          </button>
+          <Link href="/">
+            <button
+              type="button"
+              className="border p-3 text-[16px] text-buttonOrange rounded-lg border-buttonOrange hover:bg-buttonOrange hover:text-white"
+            >
+              გაუქმება
+            </button>
+          </Link>
           <button
             className="p-3 bg-buttonOrange
  hover:bg-hoverOrange text-[16px] text-white hover-ease rounded-lg "
