@@ -13,7 +13,7 @@ export async function getRegions() {
     );
     if (!response.ok) console.error("Request failed");
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (err) {
     console.error(err);

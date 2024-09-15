@@ -14,6 +14,8 @@ import { useCreateNewListing } from "@/hooks/useCreateNewListing";
 
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import Test from "./Test";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 export default function CreateNewListing() {
   const { control, register, handleSubmit, formState, watch, reset, setValue } =
@@ -33,6 +35,17 @@ export default function CreateNewListing() {
   const { agents } = useAgents();
   const queryClient = useQueryClient();
   const [filteredCities, setFilteredCities] = useState([]);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [agentID, setAgentID] = useState("");
+  const [agentName, setAgentName] = useState("აგენტების სია");
+
+  useEffect(() => {
+    const storedAgentID = JSON.parse(localStorage.getItem("agentID"));
+    const storedAgentName = JSON.parse(localStorage.getItem("agentName"));
+    console.log(storedAgentName);
+    if (storedAgentID) setAgentID(storedAgentID);
+    if (storedAgentName) setAgentName(storedAgentName);
+  }, [agentName, agentID]);
 
   const file = watch("image");
   const [filePreview, setFilePreview] = useState(null);
@@ -49,7 +62,6 @@ export default function CreateNewListing() {
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      console.log(value, name);
       if (name !== "image")
         localStorage.setItem("listingData", JSON.stringify(value));
       if (name === "image" && value.image && value.image[0]) {
@@ -68,7 +80,7 @@ export default function CreateNewListing() {
   useEffect(() => {
     const savedData = localStorage.getItem("listingData");
     const savedImage = localStorage.getItem("listingImage");
-    console.log(savedImage);
+
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       if (savedImage) setFilePreview(savedImage);
@@ -80,13 +92,23 @@ export default function CreateNewListing() {
 
   const changedRegion = watch("region_id");
   useEffect(() => {
+    console.log(cities);
+    const storedRegion = JSON.parse(
+      localStorage.getItem("listingData")
+    ).region_id;
+    console.log(storedRegion);
     if (changedRegion) {
       setFilteredCities(
         cities?.filter((city) => city.region_id === parseInt(changedRegion))
       );
     }
+    if (storedRegion) {
+      setFilteredCities(
+        cities?.filter((city) => city.region_id === parseInt(changedRegion))
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [changedRegion]);
+  }, [changedRegion, reset]);
 
   const handleRemoveImage = () => {
     setFilePreview(null);
@@ -100,7 +122,7 @@ export default function CreateNewListing() {
     formData.append("region_id", data.region_id);
     formData.append("zip_code", data.zip_code);
     formData.append("city_id", data.city_id);
-    formData.append("agent_id", Number(data.agent_id));
+    formData.append("agent_id", Number(agentID));
     formData.append("price", Number(data.price));
     formData.append("area", Number(data.area));
     formData.append("bedrooms", Number(data.bedrooms));
@@ -108,15 +130,18 @@ export default function CreateNewListing() {
     formData.append("is_rental", Number(is_rental));
     formData.append("description", data.description);
 
-    createListing(formData, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["listings"],
-        });
-        router.push("/");
-        localStorage.removeItem("formData");
-      },
-    });
+    // createListing(formData, {
+    //   onSuccess: () => {
+    //     queryClient.invalidateQueries({
+    //       queryKey: ["listings"],
+    //     });
+    //     router.push("/");
+    //     localStorage.removeItem("formData");
+    //   },
+    // });
+    for (let { key, value } of formData.entries()) {
+      console.log(key, value);
+    }
   };
 
   return (
@@ -534,7 +559,7 @@ export default function CreateNewListing() {
             {"აგენტი".toUpperCase()}
           </label>
           <label htmlFor="region_id">აირჩიე</label>
-          <Controller
+          {/* <Controller
             name="agent_id"
             control={control}
             rules={{ required: "აირჩიეთ რეგიონი" }}
@@ -559,6 +584,51 @@ export default function CreateNewListing() {
           />
           {errors.region_id && (
             <p className="text-xs text-red-400">{errors.region_id.message}</p>
+          )} */}
+
+          {/* aqedan ///////////////////////////////// */}
+          {/* aqedan ///////////////////////////////// */}
+          {/* aqedan ///////////////////////////////// */}
+        </div>
+        <div className={`${slimFont.className} text-[14px] text-iconGray`}>
+          <div
+            onClick={() => setIsSelectOpen((prev) => !prev)}
+            className={`${
+              slimFont.className
+            } text-[14px] w-[384px]  h-[42px] border py-4 border-gray-400 ${
+              isSelectOpen ? "border-b-0 rounded-t-xl" : "rounded-xl"
+            }  flex items-center px-3 cursor-pointer justify-between relative`}
+          >
+            <p>{agentName}</p>
+            <span>{isSelectOpen ? <FaAngleUp /> : <FaAngleDown />}</span>
+          </div>
+          {isSelectOpen && (
+            <div className="w-[384px] border   border-gray-400 rounded-b-lg">
+              <div className="flex border-b cursor-pointer border-gray-400 px-3 gap-2 h-[42px] items-center">
+                <img src="/icons/plus-circle.png" alt="plus"></img>
+                <p>აგენტის დამატება</p>
+              </div>
+              {agents?.map((agent, index, arr) => (
+                <div
+                  key={agent.id}
+                  className={`flex ${
+                    index < arr.length - 1 ? "border-b border-gray-400" : ""
+                  } px-3 gap-2 h-[42px] hover:bg-gray-50 items-center`}
+                  onClick={() => {
+                    setIsSelectOpen(false);
+                    setAgentID(agent.id);
+                    setAgentName(agent.name);
+                    localStorage.setItem("agentID", JSON.stringify(agent.id));
+                    localStorage.setItem(
+                      "agentName",
+                      JSON.stringify(agent.name)
+                    );
+                  }}
+                >
+                  <p>{agent.name}</p>
+                </div>
+              ))}
+            </div>
           )}
         </div>
         <div className="flex gap-[31px] h-[47px] justify-end w-full mt-[91px]">
