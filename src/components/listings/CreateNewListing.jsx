@@ -18,14 +18,22 @@ import Test from "./Test";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 export default function CreateNewListing() {
-  const { control, register, handleSubmit, formState, watch, reset, setValue } =
-    useForm({
-      defaultValues: {
-        is_rental: "იყიდება",
-        region_id: "",
-        image: "",
-      },
-    });
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState,
+    watch,
+    reset,
+    setValue,
+    trigger,
+  } = useForm({
+    defaultValues: {
+      is_rental: "იყიდება",
+      region_id: "",
+      image: "",
+    },
+  });
   const { createListing, isPending } = useCreateNewListing();
   const { errors, isSubmitting } = formState;
   const router = useRouter();
@@ -38,6 +46,9 @@ export default function CreateNewListing() {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [agentID, setAgentID] = useState("");
   const [agentName, setAgentName] = useState("აგენტების სია");
+
+  ///////////////////////////
+  const [storedImage, setStoredImage] = useState("");
 
   useEffect(() => {
     const storedAgentID = JSON.parse(localStorage.getItem("agentID"));
@@ -64,11 +75,12 @@ export default function CreateNewListing() {
     const subscription = watch((value, { name }) => {
       if (name !== "image")
         localStorage.setItem("listingData", JSON.stringify(value));
-      if (name === "image" && value.image && value.image[0]) {
+      if (name === "image" && value.image && value.image[0].name) {
         const reader = new FileReader();
         // const newUrl = URL.createObjectURL(value[0]);
         reader.onloadend = () => {
           localStorage.setItem("listingImage", reader.result);
+          localStorage.setItem("listingImageName", value.image[0].name);
         };
         reader.readAsDataURL(value.image[0]);
       }
@@ -80,15 +92,38 @@ export default function CreateNewListing() {
   useEffect(() => {
     const savedData = localStorage.getItem("listingData");
     const savedImage = localStorage.getItem("listingImage");
-
+    const savedImageName = localStorage.getItem("listingImageName");
+    console.log(savedImageName);
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      if (savedImage) setFilePreview(savedImage);
 
-      console.log(parsedData);
-      reset(parsedData);
+      if (savedImage && savedImageName) {
+        setFilePreview(savedImage);
+
+        // Create a new File object from the data URL
+        fetch(savedImage)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const file = new File([blob], savedImageName, { type: blob.type });
+            parsedData.image = [file];
+            setStoredImage([file]);
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            const fileList = dataTransfer.files;
+            setValue("image", fileList);
+
+            reset(parsedData);
+            trigger("image");
+          })
+          .catch((error) => {
+            console.error("Error creating File from blob:", error);
+            reset(parsedData);
+          });
+      } else {
+        reset(parsedData);
+      }
     }
-  }, [reset]);
+  }, [reset, setValue, trigger]);
 
   const changedRegion = watch("region_id");
   useEffect(() => {
@@ -111,12 +146,16 @@ export default function CreateNewListing() {
   }, [changedRegion, reset]);
 
   const handleRemoveImage = () => {
+    setStoredImage(null);
     setFilePreview(null);
     document.getElementById("image").value = "";
   };
+
   const submitFunction = (data) => {
     const formData = new FormData();
-    const image = data.image[0];
+    const image = data.image?.[0];
+    console.log(image);
+
     const is_rental = data.is_rental === "ქირავდება" ? 1 : 0;
     formData.append("address", data.address);
     formData.append("region_id", data.region_id);
@@ -139,7 +178,7 @@ export default function CreateNewListing() {
     //     localStorage.removeItem("formData");
     //   },
     // });
-    for (let { key, value } of formData.entries()) {
+    for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
   };
@@ -512,7 +551,7 @@ export default function CreateNewListing() {
                   onClick={handleRemoveImage}
                   className="absolute w-[24px] h-[24px] bg-white rounded-full flex justify-center items-center border border-detailsText top-[82px] left-[426px] z-30"
                 >
-                  <img src="./icons/trash.png" />
+                  <img src="./icons/trash.png" alt="remove" />
                 </div>
               ) : null}
 
@@ -540,8 +579,11 @@ export default function CreateNewListing() {
               type="file"
               accept="image/*"
               {...register("image", {
-                required: "სავალდებულო ველი",
                 validate: {
+                  required: (files) =>
+                    files.length > 0 ||
+                    storedImage !== null ||
+                    "სავალდებულო ველი", // Check if file is in the input or stored
                   size: (files) =>
                     files[0]?.size <= 5 * 1024 * 1024 ||
                     "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
@@ -559,36 +601,6 @@ export default function CreateNewListing() {
             {"აგენტი".toUpperCase()}
           </label>
           <label htmlFor="region_id">აირჩიე</label>
-          {/* <Controller
-            name="agent_id"
-            control={control}
-            rules={{ required: "აირჩიეთ რეგიონი" }}
-            render={({ field }) => (
-              <select
-                {...field}
-                className={`${slimFont.className} outline-none border border-1 border-gray-400 rounded-lg p-3  text-[14px] `}
-                id="region_id"
-              >
-                <option value="">აგენტების სია</option>
-                {agents?.map((agent) => (
-                  <option
-                    key={agent.id}
-                    className={`${slimFont.className}`}
-                    value={agent.id}
-                  >
-                    {agent.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          />
-          {errors.region_id && (
-            <p className="text-xs text-red-400">{errors.region_id.message}</p>
-          )} */}
-
-          {/* aqedan ///////////////////////////////// */}
-          {/* aqedan ///////////////////////////////// */}
-          {/* aqedan ///////////////////////////////// */}
         </div>
         <div className={`${slimFont.className} text-[14px] text-iconGray`}>
           <div
