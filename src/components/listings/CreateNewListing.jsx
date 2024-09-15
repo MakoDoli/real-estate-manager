@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { helvetica, slimFont } from "@/app/fonts/fontWeight";
 import { useCities } from "@/hooks/useCities";
@@ -33,22 +34,57 @@ export default function CreateNewListing() {
   const queryClient = useQueryClient();
   const [filteredCities, setFilteredCities] = useState([]);
 
-  const changedRegion = watch("region_id");
+  ///////////////////////////
+
+  // useEffect(() => {
+  //   setFilePreview(JSON.stringify(localStorage.getItem("listingData")).image);
+  // }, []);
+  const file = watch("image");
+  const [filePreview, setFilePreview] = useState(null);
+  useEffect(() => {
+    console.log(file);
+    if (file && file[0].name) {
+      const newUrl = URL.createObjectURL(file[0]);
+
+      if (newUrl !== filePreview) {
+        setFilePreview(newUrl);
+      }
+    }
+  }, [file]);
+  ////////////////////////
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      console.log(value, name);
+      if (name !== "image")
+        localStorage.setItem("listingData", JSON.stringify(value));
+      if (name === "image" && value.image && value.image[0]) {
+        const reader = new FileReader();
+        // const newUrl = URL.createObjectURL(value[0]);
+        reader.onloadend = () => {
+          localStorage.setItem("listingImage", reader.result);
+        };
+        reader.readAsDataURL(value.image[0]);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   useEffect(() => {
     const savedData = localStorage.getItem("listingData");
+    const savedImage = localStorage.getItem("listingImage");
+    console.log(savedImage);
     if (savedData) {
       const parsedData = JSON.parse(savedData);
+      if (savedImage) setFilePreview(savedImage);
+
+      console.log(parsedData);
       reset(parsedData);
     }
   }, [reset]);
 
-  useEffect(() => {
-    const subscription = watch((value) => {
-      localStorage.setItem("listingData", JSON.stringify(value));
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
-
+  const changedRegion = watch("region_id");
   useEffect(() => {
     if (changedRegion) {
       setFilteredCities(
@@ -59,18 +95,7 @@ export default function CreateNewListing() {
   }, [changedRegion]);
 
   const [imagePreview, setImagePreview] = useState(null);
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      console.log(file.size);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-    setValue("image", file);
-  };
+
   const handleRemoveImage = () => {
     setImagePreview(null);
     document.getElementById("image").value = "";
@@ -463,9 +488,8 @@ export default function CreateNewListing() {
         </div>
         <div className="mt-[49px] flex flex-col gap-3">
           <label htmlFor="">ატვირთეთ ფოტო*</label>
-
-          <div className="  border h-[120px] border-slate-900 rounded-lg p-3   border-dashed flex justify-center items-center">
-            <label htmlFor="image" className=" cursor-pointer">
+          <label htmlFor="image" className=" cursor-pointer">
+            <div className="  border h-[120px] border-slate-900 rounded-lg p-3 relative  border-dashed flex justify-center items-center">
               <span>
                 <Image
                   src="/icons/plus-circle.png"
@@ -474,7 +498,16 @@ export default function CreateNewListing() {
                   height={24}
                 />
               </span>
-            </label>
+              {filePreview ? (
+                <img
+                  src={filePreview}
+                  alt="preview"
+                  className="w-[92px] h-[82px] absolute"
+                />
+              ) : null}
+            </div>
+          </label>
+          <div>
             <input
               className="hidden"
               id="image"

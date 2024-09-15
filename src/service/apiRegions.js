@@ -33,7 +33,7 @@ export async function getCities() {
     );
     if (!response.ok) console.error("Request failed");
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (err) {
     console.error(err);
