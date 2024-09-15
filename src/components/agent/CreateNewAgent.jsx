@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState, useEffect } from "react";
 import { slimFont } from "@/app/fonts/fontWeight";
@@ -8,23 +9,59 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 export default function CreateNewAgent({ setOpen }) {
-  const { register, handleSubmit, formState, reset, watch } = useForm();
+  const { register, handleSubmit, formState, reset, watch } = useForm({
+    defaultValues: {
+      name: "",
+      surname: "",
+      email: "",
+      phone: "",
+      avatar: null,
+    },
+  });
   const { errors, isSubmitting } = formState;
 
+  const file = watch("avatar");
+  const [filePreview, setFilePreview] = useState(null);
   useEffect(() => {
-    const savedData = localStorage.getItem("formData");
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      reset(parsedData);
+    console.log(file);
+    if (file && file[0].name) {
+      const newUrl = URL.createObjectURL(file[0]);
+
+      if (newUrl !== filePreview) {
+        setFilePreview(newUrl);
+      }
     }
+  }, [file]);
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      console.log(value, name);
+      if (name !== "avatar")
+        localStorage.setItem("formData", JSON.stringify(value));
+      if (name === "avatar" && value.avatar && value.avatar[0]) {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          localStorage.setItem("formDataImage", reader.result);
+        };
+        reader.readAsDataURL(value.avatar[0]);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [reset]);
 
   useEffect(() => {
-    const subscription = watch((value) => {
-      localStorage.setItem("formData", JSON.stringify(value));
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    const savedData = localStorage.getItem("formData");
+    const savedImage = localStorage.getItem("formDataImage");
+
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      if (savedImage) setFilePreview(savedImage);
+
+      reset(parsedData);
+    }
+  }, [reset]);
 
   const submitFunction = (data) => {
     const formData = new FormData();
@@ -37,7 +74,6 @@ export default function CreateNewAgent({ setOpen }) {
 
     createNewAgent(formData);
 
-    // Clear localStorage on successful submit
     localStorage.removeItem("formData");
   };
 
@@ -191,9 +227,8 @@ export default function CreateNewAgent({ setOpen }) {
       </div>
       <div className="mt-[49px] flex flex-col gap-3">
         <label htmlFor="">ატვირთეთ ფოტო*</label>
-
-        <div className="  border h-[120px] border-slate-900 rounded-lg p-3   border-dashed flex justify-center items-center">
-          <label htmlFor="avatar" className=" cursor-pointer">
+        <label htmlFor="image" className=" cursor-pointer">
+          <div className="  border h-[120px] border-slate-900 rounded-lg p-3 relative  border-dashed flex justify-center items-center">
             <span>
               <Image
                 src="/icons/plus-circle.png"
@@ -202,10 +237,19 @@ export default function CreateNewAgent({ setOpen }) {
                 height={24}
               />
             </span>
-          </label>
+            {filePreview ? (
+              <img
+                src={filePreview}
+                alt="preview"
+                className="w-[92px] h-[82px] absolute"
+              />
+            ) : null}
+          </div>
+        </label>
+        <div>
           <input
             className="hidden"
-            id="avatar"
+            id="image"
             type="file"
             accept="image/*"
             {...register("avatar", {
@@ -216,6 +260,7 @@ export default function CreateNewAgent({ setOpen }) {
                   "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
               },
             })}
+            //onChange={handleImageChange}
           />
           {errors.avatar && (
             <p className="text-xs text-red-400">{`${errors.avatar?.message}`}</p>

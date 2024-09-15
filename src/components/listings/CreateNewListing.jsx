@@ -34,15 +34,9 @@ export default function CreateNewListing() {
   const queryClient = useQueryClient();
   const [filteredCities, setFilteredCities] = useState([]);
 
-  ///////////////////////////
-
-  // useEffect(() => {
-  //   setFilePreview(JSON.stringify(localStorage.getItem("listingData")).image);
-  // }, []);
   const file = watch("image");
   const [filePreview, setFilePreview] = useState(null);
   useEffect(() => {
-    console.log(file);
     if (file && file[0].name) {
       const newUrl = URL.createObjectURL(file[0]);
 
@@ -50,8 +44,8 @@ export default function CreateNewListing() {
         setFilePreview(newUrl);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
-  ////////////////////////
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -93,8 +87,6 @@ export default function CreateNewListing() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changedRegion]);
-
-  const [imagePreview, setImagePreview] = useState(null);
 
   const handleRemoveImage = () => {
     setImagePreview(null);
