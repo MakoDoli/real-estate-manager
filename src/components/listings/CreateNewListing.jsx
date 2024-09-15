@@ -89,7 +89,7 @@ export default function CreateNewListing() {
   }, [changedRegion]);
 
   const handleRemoveImage = () => {
-    setImagePreview(null);
+    setFilePreview(null);
     document.getElementById("image").value = "";
   };
   const submitFunction = (data) => {
@@ -482,6 +482,15 @@ export default function CreateNewListing() {
           <label htmlFor="">ატვირთეთ ფოტო*</label>
           <label htmlFor="image" className=" cursor-pointer">
             <div className="  border h-[120px] border-slate-900 rounded-lg p-3 relative  border-dashed flex justify-center items-center">
+              {filePreview ? (
+                <div
+                  onClick={handleRemoveImage}
+                  className="absolute w-[24px] h-[24px] bg-white rounded-full flex justify-center items-center border border-detailsText top-[82px] left-[426px] z-30"
+                >
+                  <img src="./icons/trash.png" />
+                </div>
+              ) : null}
+
               <span>
                 <Image
                   src="/icons/plus-circle.png"
