@@ -66,7 +66,7 @@ export default function ListingDetails({ id, region }) {
           alt="item-image"
           height={670}
           width={839}
-          className="rounded-t-2xl"
+          className="rounded-t-2xl "
         />
         <div>
           <p className={`${boldFont.className} text-[48px] mt-[30px]`}>
