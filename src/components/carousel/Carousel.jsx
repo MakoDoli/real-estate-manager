@@ -19,12 +19,15 @@ const Carousel = ({ items }) => {
     return items[index % itemCount];
   };
 
-  const visibleItems = [
-    getItemAtIndex(startIndex),
-    getItemAtIndex(startIndex + 1),
-    getItemAtIndex(startIndex + 2),
-    getItemAtIndex(startIndex + 3),
-  ];
+  const visibleItems =
+    items.length >= 4
+      ? [
+          getItemAtIndex(startIndex),
+          getItemAtIndex(startIndex + 1),
+          getItemAtIndex(startIndex + 2),
+          getItemAtIndex(startIndex + 3),
+        ]
+      : items;
 
   return (
     <div className="relative w-[1596px] mx-auto">
@@ -40,22 +43,26 @@ const Carousel = ({ items }) => {
           ))}
         </div>
       </div>
-      <button
-        onClick={moveLeft}
-        className="absolute -left-[40px] top-1/2 transform -translate-y-1/2 hover:bg-gray-50 rounded-sm focus:outline-none"
-      >
-        <img src="/icons/back.png" alt="Left Arrow" className="w-6 h-6" />
-      </button>
-      <button
-        onClick={moveRight}
-        className="absolute -right-[40px] top-1/2 transform -translate-y-1/2 hover:bg-gray-50 rounded-sm focus:outline-none"
-      >
-        <img
-          src="/icons/rightarrow.png"
-          alt="Right Arrow"
-          className="w-6 h-6"
-        />
-      </button>
+      {items.length >= 4 && (
+        <>
+          <button
+            onClick={moveRight}
+            className="absolute -left-[40px] top-1/2 transform -translate-y-1/2 hover:bg-gray-50 rounded-sm focus:outline-none"
+          >
+            <img src="/icons/back.png" alt="Left Arrow" className="w-6 h-6" />
+          </button>
+          <button
+            onClick={moveLeft}
+            className="absolute -right-[40px] top-1/2 transform -translate-y-1/2 hover:bg-gray-50 rounded-sm focus:outline-none"
+          >
+            <img
+              src="/icons/rightarrow.png"
+              alt="Right Arrow"
+              className="w-6 h-6"
+            />
+          </button>
+        </>
+      )}
     </div>
   );
 };

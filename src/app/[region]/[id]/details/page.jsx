@@ -12,7 +12,7 @@ export default function Page({ params }) {
           <div key={k}>{i}</div>
         ))}
       </Carousel> */}
-      <CarouselContainer />
+      {/* <CarouselContainer /> */}
     </div>
   );
 }

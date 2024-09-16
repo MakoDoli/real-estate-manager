@@ -17,6 +17,7 @@ import useDeleteListing from "@/hooks/useDeleteListing";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import MinisSpinner from "../ui/MiniSpinner";
+import CarouselContainer from "../carousel/CarouselContainer";
 export default function ListingDetails({ id, region }) {
   const { listingDetails, isLoading, error } = useListingDetails();
   const { isRemovingListing, removeListing } = useDeleteListing();
@@ -188,11 +189,12 @@ export default function ListingDetails({ id, region }) {
         </div>
       </div>
       <div
-        className={`${slimFont.className} mt-3 text-detailsText text-[16px] ml-[573px]`}
+        className={`${slimFont.className} mt-3 text-detailsText text-[16px] ml-[573px] tracking-wide`}
       >
         გამოქვეყნების თარიღი {formattedDate}{" "}
       </div>
       <div className="text-[32px] my-[52px]">ბინები მსგავს ლოკაციაზე</div>
+      <CarouselContainer region={city.region.id} />
     </div>
   );
 }
