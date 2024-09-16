@@ -7,6 +7,7 @@ import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreateNewAgent({ setOpen }) {
   const { register, handleSubmit, formState, reset, watch } = useForm({
@@ -19,50 +20,19 @@ export default function CreateNewAgent({ setOpen }) {
     },
   });
   const { errors, isSubmitting } = formState;
+  const queryClient = useQueryClient();
 
   const file = watch("avatar");
   const [filePreview, setFilePreview] = useState(null);
-  useEffect(() => {
-    console.log(file);
-    if (file && file[0].name) {
-      const newUrl = URL.createObjectURL(file[0]);
 
+  useEffect(() => {
+    if (file && file[0]?.name) {
+      const newUrl = URL.createObjectURL(file[0]);
       if (newUrl !== filePreview) {
         setFilePreview(newUrl);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
-
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      console.log(value, name);
-      if (name !== "avatar")
-        localStorage.setItem("formData", JSON.stringify(value));
-      if (name === "avatar" && value.avatar && value.avatar[0]) {
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-          localStorage.setItem("formDataImage", reader.result);
-        };
-        reader.readAsDataURL(value.avatar[0]);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [reset]);
-
-  useEffect(() => {
-    const savedData = localStorage.getItem("formData");
-    const savedImage = localStorage.getItem("formDataImage");
-
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      if (savedImage) setFilePreview(savedImage);
-
-      reset(parsedData);
-    }
-  }, [reset]);
 
   const handleRemoveImage = () => {
     setFilePreview(null);
@@ -78,9 +48,12 @@ export default function CreateNewAgent({ setOpen }) {
     formData.append("phone", data.phone || "");
     formData.append("avatar", avatar);
 
-    createNewAgent(formData);
-
-    localStorage.removeItem("formData");
+    createNewAgent(formData, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["agents"] });
+        setOpen();
+      },
+    });
   };
 
   return (
@@ -91,7 +64,9 @@ export default function CreateNewAgent({ setOpen }) {
             <label htmlFor="name">სახელი*</label>
 
             <input
-              className={`outline-none border border-gray-400 rounded-lg p-3 text-black font-thin`}
+              className={`outline-none border ${
+                errors.name ? "border-red-500" : "border-gray-400"
+              } rounded-lg p-3 text-black font-thin`}
               id="name"
               type="text"
               {...register("name", {
@@ -130,7 +105,9 @@ export default function CreateNewAgent({ setOpen }) {
               <label htmlFor="email">ელ-ფოსტა*</label>
 
               <input
-                className=" outline-none border border-1 border-gray-400 rounded-lg p-3 text-black font-thin"
+                className={`outline-none border ${
+                  errors.email ? "border-red-500" : "border-gray-400"
+                } rounded-lg p-3 text-black font-thin`}
                 type="email"
                 id="email"
                 {...register("email", {
@@ -172,7 +149,9 @@ export default function CreateNewAgent({ setOpen }) {
               <p className="text-xs text-red-400">{`${errors.surname?.message}`}</p>
             )}
             <input
-              className=" outline-none border border-1 border-gray-400 rounded-lg p-3 text-black font-thin"
+              className={`outline-none border ${
+                errors.surname ? "border-red-500" : "border-gray-400"
+              } rounded-lg p-3 text-black font-thin`}
               id="surname"
               type="text"
               {...register("surname", {
@@ -200,7 +179,9 @@ export default function CreateNewAgent({ setOpen }) {
             <label htmlFor="phone">ტელეფონის ნომერი</label>
 
             <input
-              className=" outline-none border border-1 border-gray-400 rounded-lg p-3 text-black font-thin"
+              className={`outline-none border ${
+                errors.phone ? "border-red-500" : "border-gray-400"
+              } rounded-lg p-3 text-black font-thin`}
               id="phone"
               type="text"
               {...register("phone", {
@@ -238,7 +219,9 @@ export default function CreateNewAgent({ setOpen }) {
             {filePreview ? (
               <div
                 onClick={handleRemoveImage}
-                className="absolute w-[24px] h-[24px] bg-white rounded-full flex justify-center items-center border border-detailsText top-[82px] left-[426px] z-30"
+                className={`absolute w-[24px] h-[24px] bg-white rounded-full flex justify-center items-center border ${
+                  errors.avatar ? "border-red-500" : "border-detailsText"
+                }  top-[82px] left-[426px] z-30`}
               >
                 <img src="./icons/trash.png" alt="remove" />
               </div>
@@ -274,7 +257,6 @@ export default function CreateNewAgent({ setOpen }) {
                   "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
               },
             })}
-            //onChange={handleImageChange}
           />
           {errors.avatar && (
             <p className="text-xs text-red-400">{`${errors.avatar?.message}`}</p>

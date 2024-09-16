@@ -217,9 +217,6 @@ export default function CreateNewListing() {
               <span className="ml-2 text-sm">ქირავდება</span>
             </label>
           </div>
-          {errors.choice && (
-            <span className="text-red-500 text-sm">This field is required</span>
-          )}
         </div>
         <div className="mb-[80px]">
           <label
@@ -233,7 +230,9 @@ export default function CreateNewListing() {
                 <label htmlFor="address">მისამართი*</label>
 
                 <input
-                  className={`outline-none border border-gray-400 rounded-lg p-3 text-black font-thin h-[42px]`}
+                  className={`outline-none border ${
+                    errors.address ? "border-red-500" : "border-gray-400"
+                  } rounded-lg p-3 text-black font-thin h-[42px]`}
                   id="address"
                   type="text"
                   {...register("address", {
@@ -277,7 +276,13 @@ export default function CreateNewListing() {
                     render={({ field }) => (
                       <select
                         {...field}
-                        className={`${slimFont.className} outline-none border border-1 border-gray-400 rounded-lg p-3  text-[14px] `}
+                        className={`${
+                          slimFont.className
+                        } outline-none border border-1  ${
+                          errors.region_id
+                            ? "border-red-500"
+                            : "border-gray-400"
+                        } rounded-lg p-3  text-[14px] `}
                         id="region_id"
                       >
                         <option value="">აირჩიეთ რეგიონი</option>
@@ -306,7 +311,9 @@ export default function CreateNewListing() {
                 <label htmlFor="zip_code">საფოსტო ინდექსი*</label>
 
                 <input
-                  className=" outline-none border border-1 border-gray-400 rounded-lg p-3 h-[42px]  "
+                  className={`outline-none border border-1  ${
+                    errors.zip_code ? "border-red-500" : "border-gray-400"
+                  } rounded-lg p-3 h-[42px]`}
                   id="zip_code"
                   type="text"
                   {...register("zip_code", {
@@ -355,7 +362,11 @@ export default function CreateNewListing() {
                     render={({ field }) => (
                       <select
                         {...field}
-                        className={`${slimFont.className} outline-none border border-1 border-gray-400 rounded-lg p-3  text-[14px] `}
+                        className={`${
+                          slimFont.className
+                        } outline-none border border-1  ${
+                          errors.city_id ? "border-red-500" : "border-gray-400"
+                        } rounded-lg p-3  text-[14px] `}
                         id="region_id"
                       >
                         <option value="">აირჩიეთ ქალაქი</option>
@@ -391,7 +402,9 @@ export default function CreateNewListing() {
                 <label htmlFor="price">ფასი*</label>
 
                 <input
-                  className={`outline-none border border-gray-400 rounded-lg p-3 text-black font-thin h-[42px]`}
+                  className={`outline-none border  ${
+                    errors.price ? "border-red-500" : "border-gray-400"
+                  } rounded-lg p-3 text-black font-thin h-[42px]`}
                   id="price"
                   type="text"
                   {...register("price", {
@@ -433,7 +446,9 @@ export default function CreateNewListing() {
                   <label htmlFor="bedrooms">საძინებლის რაოდენობა</label>
 
                   <input
-                    className={`outline-none border border-gray-400 rounded-lg p-3 text-black font-thin h-[42px]`}
+                    className={`outline-none border  ${
+                      errors.bedrooms ? "border-red-500" : "border-gray-400"
+                    } rounded-lg p-3 text-black font-thin h-[42px]`}
                     id="price"
                     type="text"
                     {...register("bedrooms", {
@@ -477,7 +492,9 @@ export default function CreateNewListing() {
                 <label htmlFor="area">ფართობი*</label>
 
                 <input
-                  className=" outline-none border border-1 border-gray-400 rounded-lg p-3 h-[42px]  "
+                  className={`outline-none border border-1  ${
+                    errors.area ? "border-red-500" : "border-gray-400"
+                  } rounded-lg p-3 h-[42px]`}
                   id="area"
                   type="text"
                   {...register("area", {
@@ -519,7 +536,11 @@ export default function CreateNewListing() {
           <label htmlFor="">აღწერა*</label>
 
           <textarea
-            className={`${slimFont.className} text-sm outline-none border border-1 border-gray-400 rounded-lg p-3 h-[120px]`}
+            className={`${
+              slimFont.className
+            } text-sm outline-none border border-1  ${
+              errors.description ? "border-red-500" : "border-gray-400"
+            } rounded-lg p-3 h-[120px]`}
             id="description"
             {...register("description", {
               required: "სავალდებულო ველი",
@@ -549,11 +570,15 @@ export default function CreateNewListing() {
         <div className="mt-[49px] flex flex-col gap-3">
           <label htmlFor="">ატვირთეთ ფოტო*</label>
           <label htmlFor="image" className=" cursor-pointer">
-            <div className="  border h-[120px] border-slate-900 rounded-lg p-3 relative  border-dashed flex justify-center items-center">
+            <div
+              className={`border h-[120px] ${
+                errors.image ? "border-red-500" : "border-slate-900"
+              } rounded-lg p-3 relative  border-dashed flex justify-center items-center`}
+            >
               {filePreview ? (
                 <div
                   onClick={handleRemoveImage}
-                  className="absolute w-[24px] h-[24px] bg-white rounded-full flex justify-center items-center border border-detailsText top-[82px] left-[426px] z-30"
+                  className={`absolute w-[24px] h-[24px] bg-white rounded-full flex justify-center items-center border   top-[82px] left-[426px] z-30`}
                 >
                   <img src="./icons/trash.png" alt="remove" />
                 </div>
@@ -604,7 +629,9 @@ export default function CreateNewListing() {
           <label className={`${helvetica.className} text-lg font-medium`}>
             {"აგენტი".toUpperCase()}
           </label>
-          <label htmlFor="region_id">აირჩიე</label>
+          <label className="mb-1" htmlFor="region_id">
+            აირჩიე
+          </label>
         </div>
         <div className={`${slimFont.className} text-[14px] text-iconGray`}>
           <div
@@ -646,14 +673,21 @@ export default function CreateNewListing() {
           )}
         </div>
         <div className="flex gap-[31px] h-[47px] justify-end w-full mt-[91px]">
-          <Link href="/">
-            <button
-              type="button"
-              className="border p-3 text-[16px] text-buttonOrange rounded-lg border-buttonOrange hover:bg-buttonOrange hover:text-white"
-            >
-              გაუქმება
-            </button>
-          </Link>
+          <button
+            type="button"
+            className="border p-3 text-[16px] text-buttonOrange rounded-lg border-buttonOrange hover:bg-buttonOrange hover:text-white"
+            onClick={() => {
+              localStorage.removeItem("listingData");
+              localStorage.removeItem("listingImage");
+              localStorage.removeItem("listingImageName");
+              localStorage.removeItem("agentName");
+
+              router.push("/");
+            }}
+          >
+            გაუქმება
+          </button>
+
           <button
             className="p-3 bg-buttonOrange
  hover:bg-hoverOrange w-[187px] h-[47px] text-[16px] text-white hover-ease rounded-lg "
