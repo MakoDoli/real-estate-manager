@@ -77,3 +77,26 @@ export async function getListingById(id) {
     return NextResponse.json({ message: "Something went wrong" });
   }
 }
+
+export async function deleteListingById(id) {
+  try {
+    const response = await fetch(
+      `https://api.real-estate-manager.redberryinternship.ge/api/real-estates/${parseInt(
+        id
+      )}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (!response.ok) console.error("Request failed");
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Something went wrong" });
+  }
+}

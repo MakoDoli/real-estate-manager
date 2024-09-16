@@ -16,6 +16,15 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Test from "./Test";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import CreateNewAgent from "../agent/CreateNewAgent";
+import AddNewAgent from "./AddNewAgent";
 
 export default function CreateNewListing() {
   const {
@@ -77,7 +86,7 @@ export default function CreateNewListing() {
         localStorage.setItem("listingData", JSON.stringify(value));
       if (name === "image" && value.image && value.image[0].name) {
         const reader = new FileReader();
-        // const newUrl = URL.createObjectURL(value[0]);
+
         reader.onloadend = () => {
           localStorage.setItem("listingImage", reader.result);
           localStorage.setItem("listingImageName", value.image[0].name);
@@ -128,9 +137,7 @@ export default function CreateNewListing() {
   const changedRegion = watch("region_id");
   useEffect(() => {
     console.log(cities);
-    const storedRegion = JSON.parse(
-      localStorage.getItem("listingData")
-    ).region_id;
+    const storedRegion = JSON.parse(localStorage.getItem("listingData"));
     console.log(storedRegion);
     if (changedRegion) {
       setFilteredCities(
@@ -139,7 +146,9 @@ export default function CreateNewListing() {
     }
     if (storedRegion) {
       setFilteredCities(
-        cities?.filter((city) => city.region_id === parseInt(changedRegion))
+        cities?.filter(
+          (city) => city.region_id === parseInt(storedRegion.region_id)
+        )
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,15 +178,17 @@ export default function CreateNewListing() {
     formData.append("is_rental", Number(is_rental));
     formData.append("description", data.description);
 
-    // createListing(formData, {
-    //   onSuccess: () => {
-    //     queryClient.invalidateQueries({
-    //       queryKey: ["listings"],
-    //     });
-    //     router.push("/");
-    //     localStorage.removeItem("formData");
-    //   },
-    // });
+    createListing(formData, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["listings"],
+        });
+        localStorage.removeItem("listingData");
+        localStorage.removeItem("listingImage");
+        localStorage.removeItem("listingImageName");
+        router.push("/");
+      },
+    });
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
@@ -616,10 +627,23 @@ export default function CreateNewListing() {
           </div>
           {isSelectOpen && (
             <div className="w-[384px] border   border-gray-400 rounded-b-lg">
-              <div className="flex border-b cursor-pointer border-gray-400 px-3 gap-2 h-[42px] items-center">
-                <img src="/icons/plus-circle.png" alt="plus"></img>
-                <p>აგენტის დამატება</p>
-              </div>
+              <AddNewAgent />
+              {/* <Dialog>
+                <DialogTrigger>
+                  <div className="flex border-b cursor-pointer border-gray-400 px-3 w-[384px] gap-2 h-[42px] items-center">
+                    <img src="/icons/plus-circle.png" alt="plus"></img>
+                    <p>აგენტის დამატება</p>
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="flex h-full max-h-[784px]  flex-col max-w-[1009px]  items-center overflow-y-auto justify-center gap-8">
+                  <DialogHeader className="items-center">
+                    <DialogTitle className="text-[32px]">
+                      აგენტის დამატება
+                    </DialogTitle>
+                  </DialogHeader>
+                  <CreateNewAgent setOpen={() => setOpen(false)} />
+                </DialogContent>
+              </Dialog> */}
               {agents?.map((agent, index, arr) => (
                 <div
                   key={agent.id}

@@ -12,7 +12,13 @@ export default function ListingCard({ item }) {
       }`}</div>
 
       <Link href={`/${item.city.region.id}/${item.id}/details`}>
-        <Image src={item.image} width={384} height={307} alt="listing-image" />
+        <img
+          src={item.image}
+          width={384}
+          height={307}
+          alt="listing-image "
+          className="rounded-lg h-[307px] w-[384px]"
+        />
       </Link>
       <div className="px-[25px] py-[22px]">
         <p className={`${boldFont.className} text-[28px]`}>{item.price} ₾</p>
