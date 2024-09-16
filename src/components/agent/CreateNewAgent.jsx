@@ -31,6 +31,7 @@ export default function CreateNewAgent({ setOpen }) {
         setFilePreview(newUrl);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
   useEffect(() => {
@@ -239,7 +240,7 @@ export default function CreateNewAgent({ setOpen }) {
                 onClick={handleRemoveImage}
                 className="absolute w-[24px] h-[24px] bg-white rounded-full flex justify-center items-center border border-detailsText top-[82px] left-[426px] z-30"
               >
-                <img src="./icons/trash.png" />
+                <img src="./icons/trash.png" alt="remove" />
               </div>
             ) : null}
             <span>
