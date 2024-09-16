@@ -5,7 +5,7 @@ import { useCities } from "@/hooks/useCities";
 import { useRegions } from "@/hooks/useRegions";
 import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
-import { HiOutlineTrash } from "react-icons/hi2";
+
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useAgents } from "@/hooks/useAgents";
@@ -14,16 +14,9 @@ import { useCreateNewListing } from "@/hooks/useCreateNewListing";
 
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import Test from "./Test";
+
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import CreateNewAgent from "../agent/CreateNewAgent";
+
 import AddNewAgent from "./AddNewAgent";
 
 export default function CreateNewListing() {
@@ -628,22 +621,7 @@ export default function CreateNewListing() {
           {isSelectOpen && (
             <div className="w-[384px] border   border-gray-400 rounded-b-lg">
               <AddNewAgent />
-              {/* <Dialog>
-                <DialogTrigger>
-                  <div className="flex border-b cursor-pointer border-gray-400 px-3 w-[384px] gap-2 h-[42px] items-center">
-                    <img src="/icons/plus-circle.png" alt="plus"></img>
-                    <p>აგენტის დამატება</p>
-                  </div>
-                </DialogTrigger>
-                <DialogContent className="flex h-full max-h-[784px]  flex-col max-w-[1009px]  items-center overflow-y-auto justify-center gap-8">
-                  <DialogHeader className="items-center">
-                    <DialogTitle className="text-[32px]">
-                      აგენტის დამატება
-                    </DialogTitle>
-                  </DialogHeader>
-                  <CreateNewAgent setOpen={() => setOpen(false)} />
-                </DialogContent>
-              </Dialog> */}
+
               {agents?.map((agent, index, arr) => (
                 <div
                   key={agent.id}
