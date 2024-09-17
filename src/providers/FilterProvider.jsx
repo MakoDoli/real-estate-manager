@@ -9,8 +9,10 @@ export function useFilters() {
 
 export function FilterProvider({ children }) {
   const [filters, setFilters] = useState([]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const savedFilters = localStorage.getItem("filters");
     if (savedFilters) {
       setFilters(JSON.parse(savedFilters));
@@ -18,12 +20,11 @@ export function FilterProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("filters", JSON.stringify(filters));
-  }, [filters]);
+    if (isClient) {
+      localStorage.setItem("filters", JSON.stringify(filters));
+    }
+  }, [filters, isClient]);
 
-  const addFilter = (filter) => {
-    setFilters([...filters, filter]);
-  };
   console.log(filters);
   return (
     <FilterContext.Provider value={{ filters, setFilters }}>

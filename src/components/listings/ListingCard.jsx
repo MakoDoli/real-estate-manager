@@ -12,11 +12,13 @@ export default function ListingCard({ item }) {
           item.is_rental === 1 ? "ქირავდება" : "იყიდება"
         }`}</div>
 
-        <img
+        <Image
           src={item.image}
           width={384}
           height={307}
           alt="listing-image "
+          quality={50}
+          priority={true}
           className="rounded-lg h-[307px] w-[384px]"
         />
 

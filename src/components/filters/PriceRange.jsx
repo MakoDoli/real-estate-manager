@@ -12,7 +12,7 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
     { min: 10000, max: 150000 },
     { min: 150000, max: 200000 },
     { min: 200000, max: 250000 },
-    { min: 250000, max: 250000 },
+    { min: 250000, max: 300000 },
   ];
 
   const handleOptionClick = (option) => {

@@ -12,7 +12,7 @@ const AreaRange = forwardRef(({ open, setOpen }, ref) => {
     { min: 50, max: 100 },
     { min: 100, max: 150 },
     { min: 150, max: 200 },
-    { min: 200, max: 250 },
+    { min: 200, max: 300 },
   ];
 
   const handleOptionClick = (option) => {
