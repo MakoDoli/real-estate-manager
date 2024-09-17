@@ -154,6 +154,7 @@ export default function CreateNewListing() {
   };
 
   const submitFunction = (data) => {
+    if (agentName === "აგენტების სია") return;
     const formData = new FormData();
     const image = data.image?.[0];
     console.log(image);
@@ -268,7 +269,7 @@ export default function CreateNewListing() {
               </div>
               <div>
                 <div className="flex flex-col gap-1 w-[384px] h-[64px]">
-                  <label htmlFor="region_id">რეგიონი</label>
+                  <label htmlFor="region_id">რეგიონი*</label>
                   <Controller
                     name="region_id"
                     control={control}
@@ -289,7 +290,7 @@ export default function CreateNewListing() {
                         {regions?.map((region) => (
                           <option
                             key={region.id}
-                            className={`${slimFont.className}`}
+                            className={`${slimFont.className} `}
                             value={region.id}
                           >
                             {region.name}
@@ -354,7 +355,7 @@ export default function CreateNewListing() {
               </div>
               {changedRegion && changedRegion !== "" && (
                 <div className="flex flex-col gap-1 w-[384px] h-[64px]">
-                  <label htmlFor="city_id">ქალაქი</label>
+                  <label htmlFor="city_id">ქალაქი*</label>
                   <Controller
                     name="city_id"
                     control={control}
@@ -443,7 +444,7 @@ export default function CreateNewListing() {
               </div>
               <div>
                 <div className="flex flex-col gap-1 w-[384px] h-[64px]">
-                  <label htmlFor="bedrooms">საძინებლის რაოდენობა</label>
+                  <label htmlFor="bedrooms">საძინებლის რაოდენობა*</label>
 
                   <input
                     className={`outline-none border  ${
@@ -638,7 +639,11 @@ export default function CreateNewListing() {
             onClick={() => setIsSelectOpen((prev) => !prev)}
             className={`${
               slimFont.className
-            } text-[14px] w-[384px]  h-[42px] border py-4 border-gray-400 ${
+            } text-[14px] w-[384px]  h-[42px] border py-4 ${
+              agentName === "აგენტების სია"
+                ? "border-red-500"
+                : "border-gray-400"
+            } ${
               isSelectOpen ? "border-b-0 rounded-t-xl" : "rounded-xl"
             }  flex items-center px-3 cursor-pointer justify-between relative`}
           >

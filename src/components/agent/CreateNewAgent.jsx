@@ -144,10 +144,8 @@ export default function CreateNewAgent({ setOpen }) {
         </div>
         <div className="flex flex-col gap-[49px]">
           <div className="flex flex-col gap-1 w-[384px] h-[64px]">
-            <label htmlFor="surname">გვარი</label>
-            {errors.surname && (
-              <p className="text-xs text-red-400">{`${errors.surname?.message}`}</p>
-            )}
+            <label htmlFor="surname">გვარი*</label>
+
             <input
               className={`outline-none border ${
                 errors.surname ? "border-red-500" : "border-gray-400"
@@ -161,19 +159,28 @@ export default function CreateNewAgent({ setOpen }) {
                 },
               })}
             />
-            <p
-              className={`${slimFont.className} text-xs flex items-center gap-2`}
-            >
-              <span>
-                <Image
-                  src="/icons/check.png"
-                  width={10}
-                  height={8}
-                  alt="check"
-                />
-              </span>
-              მინიმუმ ორი სიმბოლო
-            </p>
+            {errors.surname && (
+              <p
+                className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+              >
+                {errors.surname?.message}
+              </p>
+            )}
+            {!errors.surname && (
+              <p
+                className={`${slimFont.className} text-xs flex items-center gap-2`}
+              >
+                <span>
+                  <Image
+                    src="/icons/check.png"
+                    width={10}
+                    height={8}
+                    alt="check"
+                  />
+                </span>
+                მინიმუმ ორი სიმბოლო
+              </p>
+            )}
           </div>
           <div className="flex flex-col gap-1 w-[384px] h-[64px]">
             <label htmlFor="phone">ტელეფონის ნომერი</label>
