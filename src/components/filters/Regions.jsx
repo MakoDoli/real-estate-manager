@@ -1,11 +1,13 @@
 import { slimFont } from "@/app/fonts/fontWeight";
 import { useRegions } from "@/hooks/useRegions";
+import { FilterContext } from "@/providers/FilterProvider";
 import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useContext } from "react";
 
 const Regions = forwardRef(({ open, setOpen }, ref) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const { filters, setFilters } = useContext(FilterContext);
 
   const { regions, isLoading } = useRegions();
 
@@ -17,17 +19,32 @@ const Regions = forwardRef(({ open, setOpen }, ref) => {
     );
   };
 
+  const handleFilter = () => {
+    const updatedFilters = [...filters];
+    selectedOptions.forEach((option) => {
+      const exists = updatedFilters.some(
+        (filter) => filter.type === "city" && filter.value === option
+      );
+
+      if (!exists) {
+        updatedFilters.push({ type: "city", value: option });
+      }
+    });
+
+    setFilters(updatedFilters);
+    setOpen(false);
+  };
+
   if (!open) return null;
   if (isLoading) return <MinisSpinner />;
 
   return (
-    <div className="relative inline-block" ref={ref}>
-      <div className="absolute mt-2 bg-white border border-gray-300 w-[731px] h-[284px] overflow-y-auto rounded-lg p-2 shadow-md z-30">
-        <div className="mb-4">
-          <h3 className="text-base">რეგიონის მიხედვით</h3>
-        </div>
+    <div ref={ref}>
+      <div className="absolute mt-4 bg-white border border-gray-300 w-[731px] h-[284px] -left-2 flex flex-col overflow-y-auto rounded-[10px] py-6 px-[16px] shadow-md z-30">
+        <h1 className="text-base mb-4 ml-[6px]">რეგიონის მიხედვით</h1>
+
         <div
-          className={`${slimFont.className} grid grid-cols-3 gap-2 text-sm w-[679px] h-[128px]`}
+          className={`${slimFont.className} grid grid-cols-3 gap-x-[50px] gap-y-4 text-sm w-[679px] mb-8 h-[128px]`}
         >
           {regions?.map((item) => (
             <label key={item.id} className="flex items-center space-x-2">
@@ -51,10 +68,12 @@ const Regions = forwardRef(({ open, setOpen }, ref) => {
             </label>
           ))}
         </div>
-      </div>
-
-      <div className="mt-4 hidden">
-        <strong>Selected:</strong> {selectedOptions.join(", ")}
+        <div
+          className="w-[77px] h-[33px] rounded-[8px] bg-buttonOrange flex justify-center items-center cursor-pointer text-white text-[14px] self-end"
+          onClick={handleFilter}
+        >
+          არჩევა
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import Regions from "./Regions";
 
-function RegionsButton() {
+function MenuButton({ PassedComponent, buttonText }) {
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef(null);
-  const regionsRef = useRef(null);
+  const contentRef = useRef(null);
 
   const toggleDropdown = (event) => {
     event.stopPropagation();
@@ -17,8 +16,8 @@ function RegionsButton() {
       if (
         buttonRef.current &&
         !buttonRef.current.contains(event.target) &&
-        regionsRef.current &&
-        !regionsRef.current.contains(event.target)
+        contentRef.current &&
+        !contentRef.current.contains(event.target)
       ) {
         setIsOpen(false);
       }
@@ -29,7 +28,7 @@ function RegionsButton() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  console.log("REGIOENIIII:" + isOpen);
+
   return (
     <div className="relative inline-block">
       <span>
@@ -38,15 +37,21 @@ function RegionsButton() {
           onClick={toggleDropdown}
           className={`${
             isOpen ? "bg-gray-100" : "bg-white"
-          } flex w-[116px] h-[35px] items-center gap-2 px-4 py-2 rounded`}
+          } flex h-[35px] text-iconGray gap-1 items-center text=[16px]  px-4 py-2 rounded`}
         >
-          <span>რეგიონი</span>
+          <span>{buttonText}</span>
           <span>{isOpen ? <FaAngleUp /> : <FaAngleDown />}</span>
         </button>
       </span>
-      {isOpen && <Regions open={isOpen} setOpen={setIsOpen} ref={regionsRef} />}
+      {isOpen && (
+        <PassedComponent
+          ref={contentRef}
+          open={isOpen}
+          setOpen={() => setIsOpen(false)}
+        />
+      )}
     </div>
   );
 }
 
-export default RegionsButton;
+export default MenuButton;

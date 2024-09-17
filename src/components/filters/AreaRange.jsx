@@ -2,17 +2,17 @@ import { slimFont } from "@/app/fonts/fontWeight";
 import React, { forwardRef, useState, useContext } from "react";
 import { FilterContext } from "../../providers/FilterProvider";
 
-const PriceRange = forwardRef(({ open, setOpen }, ref) => {
+const AreaRange = forwardRef(({ open, setOpen }, ref) => {
   const { filters, setFilters } = useContext(FilterContext);
   const [minValue, setMinValue] = useState("");
   const [maxValue, setMaxValue] = useState("");
 
   const prices = [
-    { min: 0, max: 100000 },
-    { min: 10000, max: 150000 },
-    { min: 150000, max: 200000 },
-    { min: 200000, max: 250000 },
-    { min: 250000, max: 250000 },
+    { min: 0, max: 50 },
+    { min: 50, max: 100 },
+    { min: 100, max: 150 },
+    { min: 150, max: 200 },
+    { min: 200, max: 250 },
   ];
 
   const handleOptionClick = (option) => {
@@ -24,8 +24,8 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
     if (minValue !== "" && maxValue !== "") {
       const newRange = { min: minValue, max: maxValue };
 
-      const updatedFilters = filters.filter((f) => f.type !== "price"); //
-      updatedFilters.push({ type: "price", value: newRange });
+      const updatedFilters = filters.filter((f) => f.type !== "area"); //
+      updatedFilters.push({ type: "area", value: newRange });
       setFilters(updatedFilters);
     }
     setOpen();
@@ -38,7 +38,7 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
       ref={ref}
       className={`flex flex-col w-[382px] h-[372px] bg-white absolute z-40 rounded-[10px] mt-4 border border-gray-300 p-6`}
     >
-      <h1 className="text-iconGray text-[16px] mb-6">ფასის მიხედვით</h1>
+      <h1 className="text-iconGray text-[16px] mb-6">ფართობის მიხედვით</h1>
       <div className="flex gap-[15px] relative  mb-6 h-[42px] ">
         <label>
           <input
@@ -51,12 +51,12 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
           <p
             className={`${slimFont.className} absolute text-deleteListing text-[12px] top-[13px] left-[132px]`}
           >
-            ₾
+            მ<sup>2</sup>
           </p>
           <p
             className={`${slimFont.className} absolute text-deleteListing text-[12px] top-[13px] left-[302px]`}
           >
-            ₾
+            მ<sup>2</sup>
           </p>
         </label>
         <label>
@@ -71,9 +71,13 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
       </div>
 
       <ul className="mb-6">
-        <div className="text-iconGray gap-[120px] mb-4 text-[14px] flex">
-          <p>მინ.ფასი</p>
-          <p>მაქს.ფასი</p>
+        <div className="text-iconGray gap-[140px] mb-4 text-[14px] flex">
+          <p>
+            მინ.მ<sup>2</sup>
+          </p>
+          <p>
+            მაქს.მ<sup>2</sup>
+          </p>
         </div>
         {prices.map((price, index) => (
           <li
@@ -81,8 +85,12 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
             key={index}
             onClick={() => handleOptionClick(price)}
           >
-            <p className="w-[100px]">{price.min} ₾</p>
-            <p>{price.max} ₾</p>
+            <p className="w-[100px]">
+              {price.min} მ<sup>2</sup>
+            </p>
+            <p>
+              {price.max} მ<sup>2</sup>
+            </p>
           </li>
         ))}
       </ul>
@@ -97,5 +105,5 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
   );
 });
 
-PriceRange.displayName = "PriceRange";
-export default PriceRange;
+AreaRange.displayName = "AreaRange";
+export default AreaRange;
