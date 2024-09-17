@@ -56,7 +56,7 @@ export default function ListingDetails({ id, region }) {
           alt="back"
         />
       </Link>
-      <div className="flex gap-[68px] relative">
+      <div className="flex gap-[68px] relative ">
         <div className="w-[142px] h-[41px] rounded-3xl bg-iconGray bg-opacity-50 flex justify-center items-center absolute z-10 text-white top-[26px] text-[20px] left-[44px]">
           {`${is_rental === 1 ? "ქირავდება" : "იყიდება"}`}
         </div>
@@ -66,8 +66,11 @@ export default function ListingDetails({ id, region }) {
           alt="item-image"
           height={670}
           width={839}
+          layout="fixed"
           className="rounded-t-2xl "
+          style={{ height: "670px", width: "839px" }}
         />
+
         <div>
           <p className={`${boldFont.className} text-[48px] mt-[30px]`}>
             {price} ₾

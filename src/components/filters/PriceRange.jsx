@@ -6,13 +6,14 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
   const { filters, setFilters } = useContext(FilterContext);
   const [minValue, setMinValue] = useState("");
   const [maxValue, setMaxValue] = useState("");
+  const [showError, setShowError] = useState(false);
 
   const prices = [
     { min: 0, max: 100000 },
     { min: 10000, max: 150000 },
     { min: 150000, max: 200000 },
     { min: 200000, max: 250000 },
-    { min: 250000, max: 250000 },
+    { min: 250000, max: 300000 },
   ];
 
   const handleOptionClick = (option) => {
@@ -21,7 +22,16 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
   };
 
   const handleFilter = () => {
-    if (minValue !== "" && maxValue !== "") {
+    if (
+      minValue !== "" &&
+      maxValue !== "" &&
+      parseFloat(minValue) > parseFloat(maxValue)
+    ) {
+      setShowError(true);
+      return;
+    }
+    setShowError(false);
+    if (minValue !== "" || maxValue !== "") {
       const newRange = { min: minValue, max: maxValue };
 
       const updatedFilters = filters.filter((f) => f.type !== "price"); //
@@ -44,7 +54,9 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
           <input
             type="text"
             value={minValue}
-            onChange={(e) => setMinValue(e.target.value)}
+            onChange={(e) => {
+              setMinValue(e.target.value);
+            }}
             placeholder="დან"
             className={`${slimFont.className} w-[155px] h-[42px] text-[14px] border border-gray-400 outline-none rounded-[6px] pl-[10px]`}
           />
@@ -68,6 +80,13 @@ const PriceRange = forwardRef(({ open, setOpen }, ref) => {
             className={`${slimFont.className} w-[155px] h-[42px] text-[14px] border border-gray-400 outline-none rounded-[6px] pl-[10px]`}
           />
         </label>
+        {showError && (
+          <p
+            className={`${slimFont.className} text-red-500 text-[12px] absolute -top-5`}
+          >
+            შეიყვანეთ ვალიდური რიცხვები
+          </p>
+        )}
       </div>
 
       <ul className="mb-6">
