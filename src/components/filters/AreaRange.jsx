@@ -6,6 +6,7 @@ const AreaRange = forwardRef(({ open, setOpen }, ref) => {
   const { filters, setFilters } = useContext(FilterContext);
   const [minValue, setMinValue] = useState("");
   const [maxValue, setMaxValue] = useState("");
+  const [showError, setShowError] = useState(false);
 
   const prices = [
     { min: 0, max: 50 },
@@ -21,7 +22,16 @@ const AreaRange = forwardRef(({ open, setOpen }, ref) => {
   };
 
   const handleFilter = () => {
-    if (minValue !== "" && maxValue !== "") {
+    if (
+      minValue !== "" &&
+      maxValue !== "" &&
+      parseFloat(minValue) > parseFloat(maxValue)
+    ) {
+      setShowError(true);
+      return;
+    }
+    setShowError(false);
+    if (minValue !== "" || maxValue !== "") {
       const newRange = { min: minValue, max: maxValue };
 
       const updatedFilters = filters.filter((f) => f.type !== "area"); //
@@ -68,6 +78,13 @@ const AreaRange = forwardRef(({ open, setOpen }, ref) => {
             className={`${slimFont.className} w-[155px] h-[42px] text-[14px] border border-gray-400 outline-none rounded-[6px] pl-[10px]`}
           />
         </label>
+        {showError && (
+          <p
+            className={`${slimFont.className} text-red-500 text-[12px] absolute -top-5`}
+          >
+            შეიყვანეთ ვალიდური რიცხვები
+          </p>
+        )}
       </div>
 
       <ul className="mb-6">

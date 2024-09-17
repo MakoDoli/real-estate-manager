@@ -19,15 +19,19 @@ function FilterList() {
             className={`${slimFont.className} rounded-full flex items-center gap-1 text-iconGray text-[14px] h-[29px] px-[10px] opacity-80 border border-gray-300 `}
           >
             <p>
-              {filter.value.min}
-              {filter.type === "price" ? "₾" : "მ"}
-              {filter.type === "area" && <sup>2</sup>}
+              {filter.value.min || "0"}
+              {filter.value.min !== "" && (filter.type === "price" ? "₾" : "მ")}
+              {filter.value.min !== "" && filter.type === "area" && (
+                <sup>2</sup>
+              )}
             </p>
             <p>-</p>
             <p>
-              {filter.value.max}
-              {filter.type === "price" ? "₾" : "მ"}
-              {filter.type === "area" && <sup>2</sup>}
+              {filter.value.max || "დან"}
+              {filter.value.max !== "" && (filter.type === "price" ? "₾" : "მ")}
+              {filter.value.max !== "" && filter.type === "area" && (
+                <sup>2</sup>
+              )}
             </p>
             <Image
               src="/icons/clear.png"
