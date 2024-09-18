@@ -5,18 +5,13 @@ import { useCities } from "@/hooks/useCities";
 import { useRegions } from "@/hooks/useRegions";
 import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
-
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useAgents } from "@/hooks/useAgents";
-import Link from "next/link";
 import { useCreateNewListing } from "@/hooks/useCreateNewListing";
-
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-
 import AddNewAgent from "./AddNewAgent";
 
 export default function CreateNewListing() {
@@ -48,14 +43,13 @@ export default function CreateNewListing() {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [agentID, setAgentID] = useState("");
   const [agentName, setAgentName] = useState("აგენტების სია");
-
-  ///////////////////////////
+  const [showAgentError, setShowAgentError] = useState(false);
   const [storedImage, setStoredImage] = useState("");
 
   useEffect(() => {
     const storedAgentID = JSON.parse(localStorage.getItem("agentID"));
     const storedAgentName = JSON.parse(localStorage.getItem("agentName"));
-    console.log(storedAgentName);
+
     if (storedAgentID) setAgentID(storedAgentID);
     if (storedAgentName) setAgentName(storedAgentName);
   }, [agentName, agentID]);
@@ -95,14 +89,13 @@ export default function CreateNewListing() {
     const savedData = localStorage.getItem("listingData");
     const savedImage = localStorage.getItem("listingImage");
     const savedImageName = localStorage.getItem("listingImageName");
-    console.log(savedImageName);
+
     if (savedData) {
       const parsedData = JSON.parse(savedData);
 
       if (savedImage && savedImageName) {
         setFilePreview(savedImage);
 
-        // Create a new File object from the data URL
         fetch(savedImage)
           .then((res) => res.blob())
           .then((blob) => {
@@ -129,14 +122,8 @@ export default function CreateNewListing() {
 
   const changedRegion = watch("region_id");
   useEffect(() => {
-    console.log(cities);
     const storedRegion = JSON.parse(localStorage.getItem("listingData"));
-    console.log(storedRegion);
-    if (changedRegion) {
-      setFilteredCities(
-        cities?.filter((city) => city.region_id === parseInt(changedRegion))
-      );
-    }
+
     if (storedRegion) {
       setFilteredCities(
         cities?.filter(
@@ -144,8 +131,14 @@ export default function CreateNewListing() {
         )
       );
     }
+    if (!storedRegion && changedRegion) {
+      setFilteredCities(
+        cities?.filter((city) => city.region_id === parseInt(changedRegion))
+      );
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [changedRegion, reset]);
+  }, [changedRegion, reset, cities]);
 
   const handleRemoveImage = () => {
     setStoredImage(null);
@@ -154,10 +147,12 @@ export default function CreateNewListing() {
   };
 
   const submitFunction = (data) => {
-    if (agentName === "აგენტების სია") return;
+    if (agentName === "აგენტების სია") {
+      setShowAgentError(true);
+      return;
+    }
     const formData = new FormData();
     const image = data.image?.[0];
-    console.log(image);
 
     const is_rental = data.is_rental === "ქირავდება" ? 1 : 0;
     formData.append("address", data.address);
@@ -640,9 +635,7 @@ export default function CreateNewListing() {
             className={`${
               slimFont.className
             } text-[14px] w-[384px]  h-[42px] border py-4 ${
-              agentName === "აგენტების სია"
-                ? "border-red-500"
-                : "border-gray-400"
+              showAgentError ? "border-red-500" : "border-gray-400"
             } ${
               isSelectOpen ? "border-b-0 rounded-t-xl" : "rounded-xl"
             }  flex items-center px-3 cursor-pointer justify-between relative`}

@@ -25,7 +25,6 @@ export function FilterProvider({ children }) {
     }
   }, [filters, isClient]);
 
-  console.log(filters);
   return (
     <FilterContext.Provider value={{ filters, setFilters }}>
       {children}

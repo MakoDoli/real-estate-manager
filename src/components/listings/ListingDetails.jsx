@@ -128,7 +128,7 @@ export default function ListingDetails({ id, region }) {
               </div>
             </div>
             <div
-              className={`${slimFont.className} mt-[40px] text-detailsText text-[16px] h-[78px] leading-[26px]`}
+              className={`${slimFont.className} mt-[40px] text-detailsText text-[16px] min-h-[78px] leading-[26px]`}
             >
               {description}
             </div>
