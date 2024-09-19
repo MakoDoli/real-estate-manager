@@ -17,7 +17,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${mediumFont.className}  antialiased`}>
+      <body className={`${mediumFont.className}  antialiased min-h-screen`}>
         <ReactQueryProvider>
           <FilterProvider>
             <Header />

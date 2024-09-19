@@ -290,7 +290,7 @@ export default function CreateNewAgent({ setOpen }) {
       </div>
       <div className="mt-[49px] flex flex-col gap-3">
         <label htmlFor="">ატვირთეთ ფოტო*</label>
-        <label htmlFor="image" className=" cursor-pointer">
+        <label htmlFor="avatar" className=" cursor-pointer">
           <div className="  border h-[120px] border-slate-900 rounded-lg p-3 relative  border-dashed flex justify-center items-center">
             {filePreview ? (
               <div
@@ -322,14 +322,14 @@ export default function CreateNewAgent({ setOpen }) {
         <div>
           <input
             className="hidden"
-            id="image"
+            id="avatar"
             type="file"
             accept="image/*"
             {...register("avatar", {
               required: "სავალდებულო ველი",
               validate: {
                 size: (files) =>
-                  files[0]?.size <= 5 * 1024 * 1024 ||
+                  files[0]?.size <= 1 * 1024 * 1024 ||
                   "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
               },
             })}

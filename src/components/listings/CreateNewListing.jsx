@@ -33,12 +33,11 @@ export default function CreateNewListing() {
   });
   const { createListing, isPending } = useCreateNewListing();
   const { errors, isSubmitting } = formState;
-  const router = useRouter();
-
   const { regions } = useRegions();
   const { cities } = useCities();
   const { agents } = useAgents();
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [filteredCities, setFilteredCities] = useState([]);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [agentID, setAgentID] = useState("");
@@ -46,6 +45,11 @@ export default function CreateNewListing() {
   const [showAgentError, setShowAgentError] = useState(false);
   const [storedImage, setStoredImage] = useState("");
   const [isInitialState, setIsInitialState] = useState(true);
+  const [agentsList, setAgentsList] = useState([]);
+
+  useEffect(() => {
+    setAgentsList(agents);
+  }, [agents]);
 
   useEffect(() => {
     const storedAgentID = JSON.parse(localStorage.getItem("agentID"));
@@ -189,7 +193,7 @@ export default function CreateNewListing() {
     <div className="flex flex-col items-center">
       <h1 className="text-[32px] mx-auto mb-[61px]">ლისტინგის დამატება</h1>
       <form
-        className="flex flex-col w-[790px] h-[1211px] "
+        className="flex flex-col  w-[790px] "
         onSubmit={handleSubmit(submitFunction)}
       >
         <div className="mb-[80px]">
@@ -724,7 +728,7 @@ export default function CreateNewListing() {
                     storedImage !== null ||
                     "სავალდებულო ველი", // Check if file is in the input or stored
                   size: (files) =>
-                    files[0]?.size <= 5 * 1024 * 1024 ||
+                    files[0]?.size <= 1 * 1024 * 1024 ||
                     "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
                 },
               })}
@@ -754,7 +758,9 @@ export default function CreateNewListing() {
             აირჩიე
           </label>
         </div>
-        <div className={`${slimFont.className} text-[14px] text-iconGray`}>
+        <div
+          className={`${slimFont.className} relative text-[14px] text-iconGray`}
+        >
           <div
             onClick={() => setIsSelectOpen((prev) => !prev)}
             className={`${
@@ -769,15 +775,15 @@ export default function CreateNewListing() {
             <span>{isSelectOpen ? <FaAngleUp /> : <FaAngleDown />}</span>
           </div>
           {isSelectOpen && (
-            <div className="w-[384px] border   border-gray-400 rounded-b-lg">
+            <div className="w-[384px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg">
               <AddNewAgent />
 
-              {agents?.map((agent, index, arr) => (
+              {[...agentsList].reverse()?.map((agent, index, arr) => (
                 <div
                   key={agent.id}
                   className={`flex ${
                     index < arr.length - 1 ? "border-b border-gray-400" : ""
-                  } px-3 gap-2 h-[42px] hover:bg-gray-50 items-center`}
+                  } px-3 gap-2 h-[42px]   hover:bg-gray-100 items-center`}
                   onClick={() => {
                     setIsSelectOpen(false);
                     setAgentID(agent.id);
@@ -795,7 +801,7 @@ export default function CreateNewListing() {
             </div>
           )}
         </div>
-        <div className="flex gap-[31px] h-[47px] justify-end w-full mt-[91px]">
+        <div className="flex gap-[31px] mb-[87px]  h-[47px] justify-end w-full mt-[90px]">
           <button
             type="button"
             className="border p-3 text-[16px] text-buttonOrange rounded-lg border-buttonOrange hover:bg-buttonOrange hover:text-white"
