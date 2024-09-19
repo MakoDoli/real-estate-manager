@@ -25,6 +25,7 @@ To get started with this project, follow these steps:
    git clone https://github.com/your-username/your-repo.git
 ```
 2. Install dependencies:
+
 ```bash
 npm run install
 ```
