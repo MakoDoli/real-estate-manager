@@ -13,7 +13,7 @@ export const filterListings = (filters, listings) => {
           } else if (min === "" && max === "") {
             return true;
           } else {
-            return listingValue >= min && listingValue <= max;
+            return listingValue >= min && listingValue < max;
           }
         } else {
           if (filter.type === "city") {

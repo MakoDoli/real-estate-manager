@@ -24,6 +24,7 @@ export default function CreateNewAgent({ setOpen }) {
 
   const file = watch("avatar");
   const [filePreview, setFilePreview] = useState(null);
+  const [isInitialState, setIsInitialState] = useState(true);
 
   useEffect(() => {
     if (file && file[0]?.name) {
@@ -81,16 +82,30 @@ export default function CreateNewAgent({ setOpen }) {
               <p
                 className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
               >
+                <span>
+                  <Image
+                    src="/icons/red-check.png"
+                    width={10}
+                    height={8}
+                    alt="check"
+                  />
+                </span>
                 {errors.name?.message}
               </p>
             )}
             {!errors.name && (
               <p
-                className={`${slimFont.className} text-xs flex items-center gap-2`}
+                className={`${slimFont.className} ${
+                  isInitialState ? "text-black" : "text-green-600"
+                } text-xs flex items-center gap-2`}
               >
                 <span>
                   <Image
-                    src="/icons/check.png"
+                    src={
+                      isInitialState
+                        ? "/icons/check.png"
+                        : "/icons/green-check.png"
+                    }
                     width={10}
                     height={8}
                     alt="check"
@@ -122,15 +137,33 @@ export default function CreateNewAgent({ setOpen }) {
                 })}
               />
               {errors.email && (
-                <p className="text-xs text-red-400">{`${errors.email?.message}`}</p>
-              )}
-              {!errors.email && (
                 <p
-                  className={`${slimFont.className} text-xs flex items-center gap-2`}
+                  className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
                 >
                   <span>
                     <Image
-                      src="/icons/check.png"
+                      src="/icons/red-check.png"
+                      width={10}
+                      height={8}
+                      alt="check"
+                    />
+                  </span>
+                  {errors.email?.message}
+                </p>
+              )}
+              {!errors.email && (
+                <p
+                  className={`${slimFont.className} ${
+                    isInitialState ? "text-black" : "text-green-600"
+                  } text-xs flex items-center gap-2`}
+                >
+                  <span>
+                    <Image
+                      src={
+                        isInitialState
+                          ? "/icons/check.png"
+                          : "/icons/green-check.png"
+                      }
                       width={10}
                       height={8}
                       alt="check"
@@ -153,6 +186,7 @@ export default function CreateNewAgent({ setOpen }) {
               id="surname"
               type="text"
               {...register("surname", {
+                required: "მინიმუმ ორი სიმბოლო",
                 minLength: {
                   value: 2,
                   message: "მინიმუმ ორი სიმბოლო",
@@ -163,16 +197,30 @@ export default function CreateNewAgent({ setOpen }) {
               <p
                 className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
               >
+                <span>
+                  <Image
+                    src="/icons/red-check.png"
+                    width={10}
+                    height={8}
+                    alt="check"
+                  />
+                </span>
                 {errors.surname?.message}
               </p>
             )}
             {!errors.surname && (
               <p
-                className={`${slimFont.className} text-xs flex items-center gap-2`}
+                className={`${slimFont.className} ${
+                  isInitialState ? "text-black" : "text-green-600"
+                } text-xs flex items-center gap-2`}
               >
                 <span>
                   <Image
-                    src="/icons/check.png"
+                    src={
+                      isInitialState
+                        ? "/icons/check.png"
+                        : "/icons/green-check.png"
+                    }
                     width={10}
                     height={8}
                     alt="check"
@@ -192,6 +240,7 @@ export default function CreateNewAgent({ setOpen }) {
               id="phone"
               type="text"
               {...register("phone", {
+                required: "სავალდებულო ველი",
                 pattern: {
                   value: /^5\d{8}$/,
                   message: "ტელეფონის ნომერი უნდა იყოს 5XXXXXXXX ფორმატში",
@@ -199,21 +248,41 @@ export default function CreateNewAgent({ setOpen }) {
               })}
             />
             {errors.phone && (
-              <p className="text-xs text-red-400">{`${errors.phone?.message}`}</p>
-            )}
-            {!errors.phone && (
               <p
-                className={`${slimFont.className} text-xs flex items-center gap-2`}
+                className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
               >
                 <span>
                   <Image
-                    src="/icons/check.png"
+                    src="/icons/red-check.png"
                     width={10}
                     height={8}
                     alt="check"
                   />
                 </span>
-                მხოლოდ რიცხვები
+                {errors.phone?.message}
+              </p>
+            )}
+            {!errors.phone && (
+              <p
+                className={`${slimFont.className} ${
+                  isInitialState ? "text-black" : "text-green-600"
+                } text-xs flex items-center gap-2`}
+              >
+                <span>
+                  <Image
+                    src={
+                      isInitialState
+                        ? "/icons/check.png"
+                        : "/icons/green-check.png"
+                    }
+                    width={10}
+                    height={8}
+                    alt="check"
+                  />
+                </span>
+                {isInitialState
+                  ? "მხოლოდ რიცხვები"
+                  : "ტელეფონის ნომერი უნდა იყოს 5XXXXXXXX ფორმატში"}
               </p>
             )}
           </div>
@@ -221,7 +290,7 @@ export default function CreateNewAgent({ setOpen }) {
       </div>
       <div className="mt-[49px] flex flex-col gap-3">
         <label htmlFor="">ატვირთეთ ფოტო*</label>
-        <label htmlFor="image" className=" cursor-pointer">
+        <label htmlFor="avatar" className=" cursor-pointer">
           <div className="  border h-[120px] border-slate-900 rounded-lg p-3 relative  border-dashed flex justify-center items-center">
             {filePreview ? (
               <div
@@ -253,20 +322,32 @@ export default function CreateNewAgent({ setOpen }) {
         <div>
           <input
             className="hidden"
-            id="image"
+            id="avatar"
             type="file"
             accept="image/*"
             {...register("avatar", {
               required: "სავალდებულო ველი",
               validate: {
                 size: (files) =>
-                  files[0]?.size <= 5 * 1024 * 1024 ||
+                  files[0]?.size <= 1 * 1024 * 1024 ||
                   "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
               },
             })}
           />
           {errors.avatar && (
-            <p className="text-xs text-red-400">{`${errors.avatar?.message}`}</p>
+            <p
+              className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+            >
+              <span>
+                <Image
+                  src="/icons/red-check.png"
+                  width={10}
+                  height={8}
+                  alt="check"
+                />
+              </span>
+              {errors.avatar?.message}
+            </p>
           )}
         </div>
       </div>
@@ -281,6 +362,7 @@ export default function CreateNewAgent({ setOpen }) {
         <button
           className="p-3 bg-buttonOrange hover:bg-hoverOrange text-[16px] text-white hover-ease rounded-lg"
           disabled={isSubmitting}
+          onClick={() => setIsInitialState(false)}
         >
           {isSubmitting ? <MinisSpinner /> : "დაამატე აგენტი"}
         </button>
