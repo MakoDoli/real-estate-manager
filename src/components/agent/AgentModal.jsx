@@ -13,7 +13,7 @@ import { slimFont } from "@/app/fonts/fontWeight";
 export default function AgentModal() {
   const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <div
           className="w-[203px] h-[47px] border border-buttonOrange text-buttonOrange hover:bg-hoverOrange flex justify-center items-center gap-2 rounded-lg hover:text-white"
