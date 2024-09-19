@@ -202,11 +202,8 @@ export default function CreateNewListing() {
         router.push("/");
       },
     });
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
   };
-  console.log(isInitialState);
+
   return (
     <div className="flex flex-col items-center">
       <h1 className="text-[32px] mx-auto mb-[61px]">ლისტინგის დამატება</h1>

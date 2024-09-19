@@ -17,11 +17,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import MinisSpinner from "../ui/MiniSpinner";
 import CarouselContainer from "../carousel/CarouselContainer";
-export default function ListingDetails({ id, region }) {
+export default function ListingDetails({ id }) {
   const { listingDetails, isLoading, error } = useListingDetails();
   const { isRemovingListing, removeListing } = useDeleteListing();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  console.log(open);
   if (error) return <div>Error: {error.message}</div>;
   if (isLoading) return <Spinner />;
   const {
@@ -159,7 +160,7 @@ export default function ListingDetails({ id, region }) {
                 <p>{phoneNumber}</p>
               </div>
             </div>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger>
                 <div
                   className={`${mediumFont.className} w-[131px] h-[34px] border border-deleteGray rounded-md text-[12px] text-deleteGray mt-5 flex justify-center items-center cursor-pointer`}

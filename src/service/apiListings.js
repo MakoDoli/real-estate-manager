@@ -70,7 +70,7 @@ export async function getListingById(id) {
     );
     if (!response.ok) console.error("Request failed");
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (err) {
     console.error(err);
@@ -93,7 +93,7 @@ export async function deleteListingById(id) {
     );
     if (!response.ok) console.error("Request failed");
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (err) {
     console.error(err);
