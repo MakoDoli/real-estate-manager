@@ -5,7 +5,7 @@ import { useCities } from "@/hooks/useCities";
 import { useRegions } from "@/hooks/useRegions";
 import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useAgents } from "@/hooks/useAgents";
 import { useCreateNewListing } from "@/hooks/useCreateNewListing";
@@ -46,6 +46,9 @@ export default function CreateNewListing() {
   const [storedImage, setStoredImage] = useState("");
   const [isInitialState, setIsInitialState] = useState(true);
   const [agentsList, setAgentsList] = useState([]);
+
+  const buttonRef = useRef(null);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     setAgentsList(agents);
@@ -144,6 +147,21 @@ export default function CreateNewListing() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changedRegion, reset, cities]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) &&
+        contentRef.current &&
+        !contentRef.current.contains(event.target)
+      ) {
+        setIsSelectOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleRemoveImage = () => {
     setStoredImage(null);
@@ -762,6 +780,7 @@ export default function CreateNewListing() {
           className={`${slimFont.className} relative text-[14px] text-iconGray`}
         >
           <div
+            ref={buttonRef}
             onClick={() => setIsSelectOpen((prev) => !prev)}
             className={`${
               slimFont.className
@@ -775,9 +794,11 @@ export default function CreateNewListing() {
             <span>{isSelectOpen ? <FaAngleUp /> : <FaAngleDown />}</span>
           </div>
           {isSelectOpen && (
-            <div className="w-[384px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg">
+            <div
+              className="w-[384px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg"
+              ref={contentRef}
+            >
               <AddNewAgent />
-
               {[...agentsList].reverse()?.map((agent, index, arr) => (
                 <div
                   key={agent.id}
