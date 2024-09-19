@@ -51,7 +51,8 @@ Building this project was both exciting and challenging!
 Finding solutions to these challenges was not only motivating but also uplifting. Every hurdle crossed felt like a step towards creating a more polished and user-friendly application!
 
 
-💬 Feedback
+##💬 Feedback
+
 Feel free to open issues or submit pull requests if you'd like to contribute or improve the project. Collaboration is always welcome! 😊
 
 ```bash
