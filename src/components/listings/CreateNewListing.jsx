@@ -45,6 +45,7 @@ export default function CreateNewListing() {
   const [agentName, setAgentName] = useState("აგენტების სია");
   const [showAgentError, setShowAgentError] = useState(false);
   const [storedImage, setStoredImage] = useState("");
+  const [isInitialState, setIsInitialState] = useState(true);
 
   useEffect(() => {
     const storedAgentID = JSON.parse(localStorage.getItem("agentID"));
@@ -147,6 +148,7 @@ export default function CreateNewListing() {
   };
 
   const submitFunction = (data) => {
+    setIsInitialState(false);
     if (agentName === "აგენტების სია") {
       setShowAgentError(true);
       return;
@@ -182,7 +184,7 @@ export default function CreateNewListing() {
       console.log(key, value);
     }
   };
-
+  console.log(isInitialState);
   return (
     <div className="flex flex-col items-center">
       <h1 className="text-[32px] mx-auto mb-[61px]">ლისტინგის დამატება</h1>
@@ -243,16 +245,32 @@ export default function CreateNewListing() {
                   <p
                     className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
                   >
+                    <span>
+                      <Image
+                        src="/icons/red-check.png"
+                        width={10}
+                        height={8}
+                        alt="check"
+                      />
+                    </span>
                     {errors.address?.message}
                   </p>
                 )}
                 {!errors.address && (
                   <p
-                    className={`${slimFont.className} text-xs flex items-center gap-2`}
+                    className={`${
+                      slimFont.className
+                    } text-xs flex items-center ${
+                      isInitialState ? "text-black" : "text-green-600"
+                    } gap-2`}
                   >
                     <span>
                       <Image
-                        src="/icons/check.png"
+                        src={
+                          isInitialState
+                            ? "/icons/check.png"
+                            : "/icons/green-check.png"
+                        }
                         width={10}
                         height={8}
                         alt="check"
@@ -295,8 +313,18 @@ export default function CreateNewListing() {
                     )}
                   />
                   {errors.region_id && (
-                    <p className="text-xs text-red-400">
-                      {errors.region_id.message}
+                    <p
+                      className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+                    >
+                      <span>
+                        <Image
+                          src="/icons/red-check.png"
+                          width={10}
+                          height={8}
+                          alt="check"
+                        />
+                      </span>
+                      {errors.region_id?.message}
                     </p>
                   )}
                 </div>
@@ -329,16 +357,30 @@ export default function CreateNewListing() {
                   <p
                     className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
                   >
+                    <span>
+                      <Image
+                        src="/icons/red-check.png"
+                        width={10}
+                        height={8}
+                        alt="check"
+                      />
+                    </span>
                     {errors.zip_code?.message}
                   </p>
                 )}
                 {!errors.zip_code && (
                   <p
-                    className={`${slimFont.className} text-xs flex items-center gap-2`}
+                    className={`${slimFont.className} ${
+                      isInitialState ? "text-black" : "text-green-600"
+                    }  text-xs flex items-center gap-2`}
                   >
                     <span>
                       <Image
-                        src="/icons/check.png"
+                        src={
+                          isInitialState
+                            ? "/icons/check.png"
+                            : "/icons/green-check.png"
+                        }
                         width={10}
                         height={8}
                         alt="check"
@@ -363,7 +405,7 @@ export default function CreateNewListing() {
                         } outline-none border border-1  ${
                           errors.city_id ? "border-red-500" : "border-gray-400"
                         } rounded-lg p-3  text-[14px] `}
-                        id="region_id"
+                        id="city_id"
                       >
                         <option value="">აირჩიეთ ქალაქი</option>
                         {filteredCities?.map((region) => (
@@ -379,8 +421,18 @@ export default function CreateNewListing() {
                     )}
                   />
                   {errors.city_id && (
-                    <p className="text-xs text-red-400">
-                      {errors.city_id.message}
+                    <p
+                      className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+                    >
+                      <span>
+                        <Image
+                          src="/icons/red-check.png"
+                          width={10}
+                          height={8}
+                          alt="check"
+                        />
+                      </span>
+                      {errors.city_id?.message}
                     </p>
                   )}
                 </div>
@@ -418,16 +470,30 @@ export default function CreateNewListing() {
                   <p
                     className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
                   >
+                    <span>
+                      <Image
+                        src="/icons/red-check.png"
+                        width={10}
+                        height={8}
+                        alt="check"
+                      />
+                    </span>
                     {errors.price?.message}
                   </p>
                 )}
                 {!errors.price && (
                   <p
-                    className={`${slimFont.className} text-xs flex items-center gap-2`}
+                    className={`${slimFont.className} ${
+                      isInitialState ? "text-black" : "text-green-600"
+                    } text-xs flex items-center gap-2`}
                   >
                     <span>
                       <Image
-                        src="/icons/check.png"
+                        src={
+                          isInitialState
+                            ? "/icons/check.png"
+                            : "/icons/green-check.png"
+                        }
                         width={10}
                         height={8}
                         alt="check"
@@ -462,16 +528,30 @@ export default function CreateNewListing() {
                     <p
                       className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
                     >
+                      <span>
+                        <Image
+                          src="/icons/red-check.png"
+                          width={10}
+                          height={8}
+                          alt="check"
+                        />
+                      </span>
                       {errors.bedrooms?.message}
                     </p>
                   )}
                   {!errors.bedrooms && (
                     <p
-                      className={`${slimFont.className} text-xs flex items-center gap-2`}
+                      className={`${slimFont.className} ${
+                        isInitialState ? "text-black" : "text-green-600"
+                      } text-xs flex items-center gap-2`}
                     >
                       <span>
                         <Image
-                          src="/icons/check.png"
+                          src={
+                            isInitialState
+                              ? "/icons/check.png"
+                              : "/icons/green-check.png"
+                          }
                           width={10}
                           height={8}
                           alt="check"
@@ -506,15 +586,31 @@ export default function CreateNewListing() {
                 />
 
                 {errors.area && (
-                  <p className="text-xs text-red-400">{`${errors.area?.message}`}</p>
+                  <p className="text-xs flex items-center gap-1 text-red-400">
+                    <span>
+                      <Image
+                        src="/icons/red-check.png"
+                        width={10}
+                        height={8}
+                        alt="check"
+                      />
+                    </span>
+                    {errors.area?.message}
+                  </p>
                 )}
                 {!errors.area && (
                   <p
-                    className={`${slimFont.className} text-xs flex items-center gap-2`}
+                    className={`${slimFont.className} ${
+                      isInitialState ? "text-black" : "text-green-600"
+                    } text-xs flex items-center gap-2`}
                   >
                     <span>
                       <Image
-                        src="/icons/check.png"
+                        src={
+                          isInitialState
+                            ? "/icons/check.png"
+                            : "/icons/green-check.png"
+                        }
                         width={10}
                         height={8}
                         alt="check"
@@ -545,15 +641,33 @@ export default function CreateNewListing() {
             })}
           />
           {errors.description && (
-            <p className="text-xs text-red-400">{`${errors.description?.message}`}</p>
-          )}
-          {!errors.description && (
             <p
-              className={`${slimFont.className} text-xs flex items-center gap-2`}
+              className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
             >
               <span>
                 <Image
-                  src="/icons/check.png"
+                  src="/icons/red-check.png"
+                  width={10}
+                  height={8}
+                  alt="check"
+                />
+              </span>
+              {errors.description?.message}
+            </p>
+          )}
+          {!errors.description && (
+            <p
+              className={`${slimFont.className} ${
+                isInitialState ? "text-black" : "text-green-600"
+              } text-xs flex items-center gap-2`}
+            >
+              <span>
+                <Image
+                  src={
+                    isInitialState
+                      ? "/icons/check.png"
+                      : "/icons/green-check.png"
+                  }
                   width={10}
                   height={8}
                   alt="check"
@@ -614,10 +728,21 @@ export default function CreateNewListing() {
                     "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
                 },
               })}
-              //onChange={handleImageChange}
             />
             {errors.image && (
-              <p className="text-xs text-red-400">{`${errors.image?.message}`}</p>
+              <p
+                className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+              >
+                <span>
+                  <Image
+                    src="/icons/red-check.png"
+                    width={10}
+                    height={8}
+                    alt="check"
+                  />
+                </span>
+                {errors.image?.message}
+              </p>
             )}
           </div>
         </div>
@@ -625,7 +750,7 @@ export default function CreateNewListing() {
           <label className={`${helvetica.className} text-lg font-medium`}>
             {"აგენტი".toUpperCase()}
           </label>
-          <label className="mb-1" htmlFor="region_id">
+          <label className="mb-1" htmlFor="agent_id">
             აირჩიე
           </label>
         </div>
@@ -690,6 +815,7 @@ export default function CreateNewListing() {
             className="p-3 bg-buttonOrange
  hover:bg-hoverOrange w-[187px] h-[47px] text-[16px] text-white hover-ease rounded-lg "
             disabled={isSubmitting}
+            onClick={() => setIsInitialState(false)}
           >
             {isPending ? <MinisSpinner /> : "დაამატე ლისტინგი"}
           </button>
