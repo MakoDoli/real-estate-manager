@@ -21,20 +21,19 @@ Welcome to my Next.js project! This repository showcases a modern web applicatio
 To get started with this project, follow these steps:
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/your-repo.git
+```
+git clone https://github.com/your-username/your-repo.git
 ```
 2. Install dependencies:
-
-```bash
+```
 npm run install
 ```
 3. Run the development server:
-```bash
+```
 npm run dev
 ```
 4. Open your browser and go to:
-```bash
+```
 http://localhost:3000
 ```
 5. You're all set! 🎉
