@@ -1,12 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListingCard from "../listings/ListingCard";
 
 const Carousel = ({ items }) => {
   const [startIndex, setStartIndex] = useState(0);
-  const itemCount = items.length;
 
+  const [list, setList] = useState([]);
+  const itemCount = list.length;
+  console.log(startIndex);
+  useEffect(() => {
+    const arrClone = [...items];
+    if (startIndex === 0) setList(items);
+    if (startIndex === itemCount - 4) setList([...list, ...arrClone]);
+  }, [startIndex, list]);
+  console.log(list);
   const moveLeft = () => {
     setStartIndex((prevIndex) => (prevIndex - 1 + itemCount) % itemCount);
   };
@@ -19,20 +27,22 @@ const Carousel = ({ items }) => {
     <div className="relative w-[1596px] mx-auto">
       <div className="overflow-hidden">
         <div
-          className="flex transition-transform duration-1000 ease-in-out"
+          className="flex transition-transform duration-1000 "
           style={{
-            transform: `translateX(-${startIndex * (100 / 4)}%)`,
+            transform: `translateX(calc(-${startIndex * (100 / 4)}% - ${
+              startIndex * 5
+            }px ) )`,
             gap: "20px",
           }}
         >
-          {items.map((item, index) => (
+          {list.map((item, index) => (
             <div key={index} style={{ flexBasis: "calc(25% - 15px)" }}>
               <ListingCard item={item} />
             </div>
           ))}
         </div>
       </div>
-      {items.length >= 4 && startIndex < items.length - 4 && (
+      {list.length >= 4 && (
         <button
           onClick={moveRight}
           className="absolute -left-[40px] top-1/2 transform -translate-y-1/2 hover:bg-gray-50 rounded-sm focus:outline-none"
