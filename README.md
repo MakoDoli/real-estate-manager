@@ -1,20 +1,20 @@
 # 🚀 Real Estate Manager
 
-Welcome to my Next.js project! This repository showcases a modern web application built with powerful tools like **Next.js**, **Tailwind CSS**, **react-hook-form**, **shadcn/ui**, **Context API**, and **react-query**. It's a smooth, feature-rich experience wrapped in sleek design and fine-tuned interactivity. ✨
+Welcome to my Next.js project! This repository showcases a modern web application built with powerful tools like **Next.js**, **Tailwind CSS**, **react-hook-form**, **shadcn/ui**, **Context API**, and **React-query**. It's a smooth, feature-rich experience wrapped in sleek design and fine-tuned interactivity. ✨
 
 ## 🔧 Tech Stack
 
 - **Next.js**: The backbone of this project. It provides a seamless developer experience with server-side rendering and routing capabilities that scale beautifully.
   
-- **Tailwind CSS**: Used for building out modern, and efficient UI components. 💅 It allowed for rapid styling with utility-first classes, making the UI highly customizable.
+- **Tailwind CSS**: Used for building out modern and efficient UI components. 💅 It allowed for rapid styling with utility-first classes, making the UI highly customizable.
 
-- **react-hook-form**: Simplified the process of managing form states and validations. With custom validation rules and error handling, forms in this app are robust and user-friendly. 💡
+- **React-hook-form**: Simplified the process of managing form states and validations. With custom validation rules and error handling, forms in this app are robust and user-friendly. 💡
 
-- **shadcn/ui**: This component library provided pre-styled, customizable UI elements that helped accelerate the design process while ensuring accessibility and a unified design system.
+- **Shadcn/ui**: This component library provided pre-styled, customizable UI elements that helped accelerate the design process while ensuring accessibility and a unified design system.
 
-- **Context API**: Context API was used to manage state globally across the app without the need for third-party state management libraries. Perfect for managing things like user authentication and UI theme states. 🌐
+- **Context API**: Context API was used to manage state globally across the app without the need for third-party state management libraries. Perfect for managing things like filtering 🌐
 
-- **react-query**: React-query enabled efficient data fetching, caching, and synchronization with server states, making the app fast and responsive with minimal effort. 🚀
+- **React-query**: React-query enabled efficient data fetching, caching, and synchronization with server states, making the app fast and responsive with minimal effort. 🚀
 
 ## 🏃‍♀️ Running the Project
 
