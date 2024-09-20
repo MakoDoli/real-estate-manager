@@ -2,6 +2,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -28,7 +29,14 @@ export default function AgentModal() {
           <DialogHeader className="items-center">
             <DialogTitle className="text-[32px]">აგენტის დამატება</DialogTitle>
           </DialogHeader>
-          <CreateNewAgent setOpen={() => setOpen(false)} />
+          <DialogDescription asChild>
+            <section>
+              <p id="agent-form-description" className="sr-only">
+                create new agent
+              </p>
+              <CreateNewAgent setOpen={() => setOpen(false)} />
+            </section>
+          </DialogDescription>
         </DialogContent>
       )}
     </Dialog>

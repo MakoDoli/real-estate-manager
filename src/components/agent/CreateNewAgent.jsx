@@ -2,12 +2,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { slimFont } from "@/app/fonts/fontWeight";
-import { createNewAgent } from "@/service/apiAgents";
+
 import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAddAgent } from "@/hooks/useAddAgent";
 
 export default function CreateNewAgent({ setOpen }) {
   const { register, handleSubmit, formState, reset, watch } = useForm({
@@ -19,7 +20,9 @@ export default function CreateNewAgent({ setOpen }) {
       avatar: null,
     },
   });
-  const { errors, isSubmitting } = formState;
+
+  const { addNewAgent, isPending } = useAddAgent();
+  const { errors } = formState;
   const queryClient = useQueryClient();
 
   const file = watch("avatar");
@@ -49,9 +52,10 @@ export default function CreateNewAgent({ setOpen }) {
     formData.append("phone", data.phone || "");
     formData.append("avatar", avatar);
 
-    createNewAgent(formData, {
+    addNewAgent(formData, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["agents"] });
+        console.log("SUCCESS!!!!");
         setOpen();
       },
     });
@@ -331,6 +335,10 @@ export default function CreateNewAgent({ setOpen }) {
                 size: (files) =>
                   files[0]?.size <= 1 * 1024 * 1024 ||
                   "ფოტოს ზომა არ უნდა აღემატებოდეს 1მბ-ს",
+                fileType: (files) =>
+                  ["image/jpeg", "image/png", "image/jpg"].includes(
+                    files[0]?.type
+                  ) || "მხოლოდ PNG, JPG ან JPEG ტიპის ფაილებია ნებადართული",
               },
             })}
           />
@@ -360,11 +368,11 @@ export default function CreateNewAgent({ setOpen }) {
           გაუქმება
         </button>
         <button
-          className="p-3 bg-buttonOrange hover:bg-hoverOrange text-[16px] text-white hover-ease rounded-lg"
-          disabled={isSubmitting}
+          className="p-3 bg-buttonOrange w-[187px] hover:bg-hoverOrange text-[16px] text-white hover-ease rounded-lg"
+          disabled={isPending}
           onClick={() => setIsInitialState(false)}
         >
-          {isSubmitting ? <MinisSpinner /> : "დაამატე აგენტი"}
+          {isPending ? <MinisSpinner /> : "დაამატე აგენტი"}
         </button>
       </div>
     </form>

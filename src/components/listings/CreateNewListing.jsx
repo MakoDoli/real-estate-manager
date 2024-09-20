@@ -46,6 +46,7 @@ export default function CreateNewListing() {
   const [storedImage, setStoredImage] = useState("");
   const [isInitialState, setIsInitialState] = useState(true);
   const [agentsList, setAgentsList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
@@ -150,6 +151,7 @@ export default function CreateNewListing() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      if (isModalOpen) return;
       if (
         buttonRef.current &&
         !buttonRef.current.contains(event.target) &&
@@ -161,7 +163,7 @@ export default function CreateNewListing() {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isModalOpen]);
 
   const handleRemoveImage = () => {
     setStoredImage(null);
@@ -205,7 +207,7 @@ export default function CreateNewListing() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-[790px] relative mx-auto">
       <h1 className="text-[32px] mx-auto mb-[61px]">ლისტინგის დამატება</h1>
       <form
         className="flex flex-col  w-[790px] "
@@ -642,7 +644,7 @@ export default function CreateNewListing() {
             </div>
           </div>
         </div>
-        <div></div>
+
         <div className="mt-[49px] flex flex-col gap-3">
           <label htmlFor="">აღწერა*</label>
 
@@ -651,7 +653,7 @@ export default function CreateNewListing() {
               slimFont.className
             } text-sm outline-none border border-1  ${
               errors.description ? "border-red-500" : "border-gray-400"
-            } rounded-lg p-3 h-[120px]`}
+            } rounded-lg p-3 h-[135px]`}
             id="description"
             {...register("description", {
               required: "სავალდებულო ველი",
@@ -765,6 +767,33 @@ export default function CreateNewListing() {
             )}
           </div>
         </div>
+
+        <div className="flex gap-[31px] mb-[87px]  h-[47px] justify-end w-full mt-[269px]">
+          <button
+            type="button"
+            className="border p-3 text-[16px] text-buttonOrange rounded-lg border-buttonOrange hover:bg-buttonOrange hover:text-white"
+            onClick={() => {
+              localStorage.removeItem("listingData");
+              localStorage.removeItem("listingImage");
+              localStorage.removeItem("listingImageName");
+              localStorage.removeItem("agentName");
+
+              router.push("/");
+            }}
+          >
+            გაუქმება
+          </button>
+
+          <button
+            className="bg-buttonOrange hover:bg-hoverOrange p-3 w-[187px] h-[47px] text-[16px] text-white hover-ease rounded-lg "
+            disabled={isSubmitting}
+            onClick={() => setIsInitialState(false)}
+          >
+            {isPending ? <MinisSpinner /> : "დაამატე ლისტინგი"}
+          </button>
+        </div>
+      </form>
+      <div className="absolute top-[1211px] left-0">
         <div className="flex flex-col gap-1 w-[384px] h-[64px] mt-[80px]">
           <label className={`${helvetica.className} text-lg font-medium`}>
             {"აგენტი".toUpperCase()}
@@ -795,7 +824,7 @@ export default function CreateNewListing() {
               className="w-[384px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg"
               ref={contentRef}
             >
-              <AddNewAgent />
+              <AddNewAgent setModal={() => setIsModalOpen((prev) => !prev)} />
               {[...agentsList].reverse()?.map((agent, index, arr) => (
                 <div
                   key={agent.id}
@@ -819,32 +848,7 @@ export default function CreateNewListing() {
             </div>
           )}
         </div>
-        <div className="flex gap-[31px] mb-[87px]  h-[47px] justify-end w-full mt-[90px]">
-          <button
-            type="button"
-            className="border p-3 text-[16px] text-buttonOrange rounded-lg border-buttonOrange hover:bg-buttonOrange hover:text-white"
-            onClick={() => {
-              localStorage.removeItem("listingData");
-              localStorage.removeItem("listingImage");
-              localStorage.removeItem("listingImageName");
-              localStorage.removeItem("agentName");
-
-              router.push("/");
-            }}
-          >
-            გაუქმება
-          </button>
-
-          <button
-            className="p-3 bg-buttonOrange
- hover:bg-hoverOrange w-[187px] h-[47px] text-[16px] text-white hover-ease rounded-lg "
-            disabled={isSubmitting}
-            onClick={() => setIsInitialState(false)}
-          >
-            {isPending ? <MinisSpinner /> : "დაამატე ლისტინგი"}
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }
