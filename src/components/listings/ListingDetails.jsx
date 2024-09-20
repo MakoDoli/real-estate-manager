@@ -216,7 +216,7 @@ export default function ListingDetails({ id }) {
         გამოქვეყნების თარიღი {formattedDate}{" "}
       </div>
       <div className="text-[32px] my-[52px]">ბინები მსგავს ლოკაციაზე</div>
-      <CarouselContainer region={city.region.id} />
+      <CarouselContainer region={city.region.id} listingId={id} />
     </div>
   );
 }

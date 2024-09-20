@@ -14,7 +14,7 @@ const Carousel = ({ items }) => {
   const moveRight = () => {
     setStartIndex((prevIndex) => (prevIndex + 1) % itemCount);
   };
-
+  if (items.length < 1) return <h1> მსგავს ლოკაციაზე ბინები ვერ მოიძებნა</h1>;
   return (
     <div className="relative w-[1596px] mx-auto">
       <div className="overflow-hidden">
