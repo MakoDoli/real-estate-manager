@@ -46,6 +46,7 @@ export default function CreateNewListing() {
   const [storedImage, setStoredImage] = useState("");
   const [isInitialState, setIsInitialState] = useState(true);
   const [agentsList, setAgentsList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
@@ -150,6 +151,7 @@ export default function CreateNewListing() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      if (isModalOpen) return;
       if (
         buttonRef.current &&
         !buttonRef.current.contains(event.target) &&
@@ -161,7 +163,7 @@ export default function CreateNewListing() {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isModalOpen]);
 
   const handleRemoveImage = () => {
     setStoredImage(null);
@@ -765,59 +767,61 @@ export default function CreateNewListing() {
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-1 w-[384px] h-[64px] mt-[80px]">
-          <label className={`${helvetica.className} text-lg font-medium`}>
-            {"აგენტი".toUpperCase()}
-          </label>
-          <label className="mb-1" htmlFor="agent_id">
-            აირჩიე
-          </label>
-        </div>
-        <div
-          className={`${slimFont.className} relative text-[14px] text-iconGray`}
-        >
-          <div
-            ref={buttonRef}
-            onClick={() => setIsSelectOpen((prev) => !prev)}
-            className={`${
-              slimFont.className
-            } text-[14px] w-[384px]  h-[42px] border py-4 ${
-              showAgentError ? "border-red-500" : "border-gray-400"
-            } ${
-              isSelectOpen ? "border-b-0 rounded-t-xl" : "rounded-xl"
-            }  flex items-center px-3 cursor-pointer justify-between relative`}
-          >
-            <p>{agentName}</p>
-            <span>{isSelectOpen ? <FaAngleUp /> : <FaAngleDown />}</span>
+        <div>
+          <div className="flex flex-col gap-1 w-[384px] h-[64px] mt-[80px]">
+            <label className={`${helvetica.className} text-lg font-medium`}>
+              {"აგენტი".toUpperCase()}
+            </label>
+            <label className="mb-1" htmlFor="agent_id">
+              აირჩიე
+            </label>
           </div>
-          {isSelectOpen && (
+          <div
+            className={`${slimFont.className} relative text-[14px] text-iconGray`}
+          >
             <div
-              className="w-[384px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg"
-              ref={contentRef}
+              ref={buttonRef}
+              onClick={() => setIsSelectOpen((prev) => !prev)}
+              className={`${
+                slimFont.className
+              } text-[14px] w-[384px]  h-[42px] border py-4 ${
+                showAgentError ? "border-red-500" : "border-gray-400"
+              } ${
+                isSelectOpen ? "border-b-0 rounded-t-xl" : "rounded-xl"
+              }  flex items-center px-3 cursor-pointer justify-between relative`}
             >
-              <AddNewAgent />
-              {[...agentsList].reverse()?.map((agent, index, arr) => (
-                <div
-                  key={agent.id}
-                  className={`flex ${
-                    index < arr.length - 1 ? "border-b border-gray-400" : ""
-                  } px-3 gap-2 h-[42px]   hover:bg-gray-100 items-center`}
-                  onClick={() => {
-                    setIsSelectOpen(false);
-                    setAgentID(agent.id);
-                    setAgentName(agent.name);
-                    localStorage.setItem("agentID", JSON.stringify(agent.id));
-                    localStorage.setItem(
-                      "agentName",
-                      JSON.stringify(agent.name)
-                    );
-                  }}
-                >
-                  <p>{agent.name}</p>
-                </div>
-              ))}
+              <p>{agentName}</p>
+              <span>{isSelectOpen ? <FaAngleUp /> : <FaAngleDown />}</span>
             </div>
-          )}
+            {isSelectOpen && (
+              <div
+                className="w-[384px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg"
+                ref={contentRef}
+              >
+                <AddNewAgent setModal={() => setIsModalOpen((prev) => !prev)} />
+                {[...agentsList].reverse()?.map((agent, index, arr) => (
+                  <div
+                    key={agent.id}
+                    className={`flex ${
+                      index < arr.length - 1 ? "border-b border-gray-400" : ""
+                    } px-3 gap-2 h-[42px]   hover:bg-gray-100 items-center`}
+                    onClick={() => {
+                      setIsSelectOpen(false);
+                      setAgentID(agent.id);
+                      setAgentName(agent.name);
+                      localStorage.setItem("agentID", JSON.stringify(agent.id));
+                      localStorage.setItem(
+                        "agentName",
+                        JSON.stringify(agent.name)
+                      );
+                    }}
+                  >
+                    <p>{agent.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex gap-[31px] mb-[87px]  h-[47px] justify-end w-full mt-[90px]">
           <button

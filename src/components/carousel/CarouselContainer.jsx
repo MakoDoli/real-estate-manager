@@ -7,7 +7,7 @@ import ListingCard from "../listings/ListingCard";
 
 export default function CarouselContainer({ region }) {
   const { listings, isLoading } = useListings();
-  console.log(region);
+
   if (isLoading) return <MinisSpinner />;
   const regions = listings?.filter((reg) => reg.city.region.id === region);
   return <Carousel items={regions}></Carousel>;

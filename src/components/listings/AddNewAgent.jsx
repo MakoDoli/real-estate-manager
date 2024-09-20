@@ -9,14 +9,17 @@ import {
 } from "@/components/ui/dialog";
 import CreateNewAgent from "../agent/CreateNewAgent";
 
-export default function AddNewAgent() {
+export default function AddNewAgent({ setModal }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog>
       <DialogTrigger>
         <div
           className="flex border-b cursor-pointer border-gray-400 px-3 w-[384px] gap-2 h-[42px] items-center"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setModal();
+            setOpen(true);
+          }}
         >
           <img src="/icons/plus-circle.png" alt="plus"></img>
           <p>აგენტის დამატება</p>

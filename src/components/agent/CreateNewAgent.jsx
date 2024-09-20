@@ -21,7 +21,7 @@ export default function CreateNewAgent({ setOpen }) {
   });
   const { errors, isSubmitting } = formState;
   const queryClient = useQueryClient();
-
+  console.log("ISSUBMITTING" + isSubmitting);
   const file = watch("avatar");
   const [filePreview, setFilePreview] = useState(null);
   const [isInitialState, setIsInitialState] = useState(true);
@@ -52,6 +52,7 @@ export default function CreateNewAgent({ setOpen }) {
     createNewAgent(formData, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["agents"] });
+        console.log("SUCCESS!!!!");
         setOpen();
       },
     });

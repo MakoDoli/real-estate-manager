@@ -22,8 +22,15 @@ export default function ListingDetails({ id }) {
   const { isRemovingListing, removeListing } = useDeleteListing();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  console.log(open);
-  if (error) return <div>Error: {error.message}</div>;
+
+  if (error)
+    return (
+      <h1
+        className={`${slimFont.className} text-[20px] mt-[110px] text-iconGray`}
+      >
+        აღნიშნული მონაცამებით განცხადება არ იძებნება{" "}
+      </h1>
+    );
   if (isLoading) return <Spinner />;
   const {
     price,
