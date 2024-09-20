@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -12,7 +13,7 @@ import CreateNewAgent from "../agent/CreateNewAgent";
 export default function AddNewAgent({ setModal }) {
   const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog onOpenChange={setModal}>
       <DialogTrigger>
         <div
           className="flex border-b cursor-pointer border-gray-400 px-3 w-[384px] gap-2 h-[42px] items-center"
@@ -30,7 +31,14 @@ export default function AddNewAgent({ setModal }) {
           <DialogHeader className="items-center">
             <DialogTitle className="text-[32px]">აგენტის დამატება</DialogTitle>
           </DialogHeader>
-          <CreateNewAgent setOpen={() => setOpen(false)} />
+          <DialogDescription asChild>
+            <section>
+              <p id="agent-form-description" className="sr-only">
+                create new agent
+              </p>
+              <CreateNewAgent setOpen={() => setOpen(false)} />
+            </section>
+          </DialogDescription>
         </DialogContent>
       )}
     </Dialog>
