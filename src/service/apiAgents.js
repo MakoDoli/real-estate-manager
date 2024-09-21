@@ -23,7 +23,7 @@ export async function createNewAgent(payload) {
     }
 
     const data = await response.json();
-    console.log(data);
+
     return NextResponse.json({ data }, { status: 201 });
   } catch (err) {
     console.error(err);

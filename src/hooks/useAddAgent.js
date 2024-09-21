@@ -1,13 +1,12 @@
 import { createNewAgent } from "@/service/apiAgents";
-import { createNewListing } from "@/service/apiListings";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export function useAddAgent() {
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
   const { mutate: addNewAgent, isPending } = useMutation({
     mutationFn: createNewAgent,
     // onSuccess: () => {
-    //   queryClient.invalidateQueries(["listings"]);
+    //   queryClient.invalidateQueries(["agents"]);
     // },
   });
 

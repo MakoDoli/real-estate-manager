@@ -1,8 +1,8 @@
 import { createNewListing } from "@/service/apiListings";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export function useCreateNewListing() {
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
   const { mutate: createListing, isPending } = useMutation({
     mutationFn: createNewListing,
     // onSuccess: () => {

@@ -2,7 +2,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { slimFont } from "@/app/fonts/fontWeight";
-
 import MinisSpinner from "@/ui/MiniSpinner";
 import Image from "next/image";
 import React from "react";
