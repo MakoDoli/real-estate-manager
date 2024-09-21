@@ -8,13 +8,13 @@ const Carousel = ({ items }) => {
 
   const [list, setList] = useState([]);
   const itemCount = list.length;
-  console.log(startIndex);
+
   useEffect(() => {
     const arrClone = [...items];
     if (startIndex === 0) setList(items);
     if (startIndex === itemCount - 4) setList([...list, ...arrClone]);
   }, [startIndex, list]);
-  console.log(list);
+
   const moveLeft = () => {
     setStartIndex((prevIndex) => (prevIndex - 1 + itemCount) % itemCount);
   };

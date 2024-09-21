@@ -1,4 +1,3 @@
-import React, { Suspense } from "react";
 import ListingDetails from "@/components/listings/ListingDetails";
 
 export default function Page({ params }) {
